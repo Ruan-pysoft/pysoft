@@ -24,4 +24,16 @@ ${header();}$
 
 <p>Otherwise, my email is my name @ my domain. Note that I might not respond promptly, especially if I do not know you.</p>
 
+<h2>Site source</h2>
+
+<p>The source for the content of the website is available <a href="https://github.com/Ruan-pysoft/pysoft">on GitHub</a>, as well as the <a href="https://github.com/Ruan-pysoft/webgen">program used to assemble the website</a>.</p>
+
+<p>The <a href="https://github.com/Ruan-pysoft/webgen">SSG</a> is released under the <a href="https://unlicense.org">Unlicense</a>, meaning that I've released it into the public domain and you can do anything with it your heart desires. It is a 500-odd line C program; I believe the code is relatively readable, though it is uncommented. There is no README or instructions because it is solely intended for my own use.</p>
+
+<p>If you really do want to use it, you'll have to run <code>git submodule init &amp;&amp; git submodule update</code> after cloning the repo to fetch the <code>nob.h</code> header-only library. You can then compile it with <code>cc main.c -o main</code>, and from there you can run it with <code>./main</code> and it should recompile itself if the source code changes.</p>
+
+<p>Fragments (in <code>fragments/</code>) are header files that are included into each page file. Page files (<code>page/</code>) get assembled into C files, and the output (to stdout) of running the file will be the content of the corresponding file in the output. Static files (<code>static/</code>) gets copied over to the output as-is.</p>
+
+<p>Currently the site gets completely rebuilt each time you run the generator. This works for now since C compiles surprisingly fast (yes, I'm using C as a scripting language). In the future I might start using <code>nob_needs_rebuild</code> to only regenerate the files that needs regenerating, though I'll need to work out how to also delete files which no longer have a source.</p>
+
 ${footer();}$
