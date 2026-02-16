@@ -16,6 +16,36 @@ static const Project projects[] = {
         .description = "a small lisp implementation initially written on my phone",
         .link = "https://github.com/Ruan-pysoft/rholisp",
     },
+    {
+        .id = "kernelcpp",
+        .title = "C++ Demo Kernel",
+        .description = "a bare-metal \"os\" with a few demo applications compiled in",
+        .link = "https://github.com/Ruan-pysoft/cpp_demo_kernel",
+    },
+    {
+        .id = "cruntime",
+        .title = "C Runtime Library for Linux",
+        .description = "a runtime library for C, no dependencies on libc; currently C89 but planning to move to C99",
+        .link = "https://github.com/Ruan-pysoft/ministdlib",
+    },
+    {
+        .id = "platformer",
+        .title = "Platformer Game in C++ with Raylib",
+        .description = "a small platformer game created for my CMPG121 project",
+        .link = "https://github.com/Ruan-pysoft/platformer",
+    },
+    {
+        .id = "imgavg",
+        .title = "Image Averaging",
+        .description = "a small C program to average multiple images together, emulating long exposure times",
+        .link = "https://github.com/Ruan-pysoft/image_averaging",
+    },
+    {
+        .id = "basic",
+        .title = "BASIC Interpreter",
+        .description = "interpreter for my own dialect of basic",
+        .link = "https://git.sr.ht/~ruan_p/basic_interpreter",
+    },
 };
 static const size_t projects_count = sizeof(projects)/sizeof(*projects);
 

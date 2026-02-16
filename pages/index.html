@@ -1,14 +1,21 @@
 ${header();}$
 <h1>Pysoft</h1>
-<p>Coming soon!</p>
-<p>Hopefully within a few weeks... (I said, <em>two years ago??</em>)</p>
+
+<p><a href="/blog/website">Finally here!</a></p>
+
 <h2>Blog</h2>
-<p>My blog is available at <a href="/blog">/blog</a>, where I have ${printf("%d", sizeof(blog_entries)/sizeof(*blog_entries));}$ entries so far.</p>
+
+<p>My blog is available at <a href="/blog">/blog</a>, where I have ${printf("%lu", blog_entries_count);}$ entries so far.</p>
+
 <h2>Projects</h2>
-<p>A list of projects I have can be found at <a href="/project">/project</a>.</p>
+
+<p>A list of projects I have can be found at <a href="/project">/project</a>, where I have catalogued ${printf("%lu", projects_count);}$ of my projects.</p>
+
 <p>I'm also hosting a few small JavaScript projects on my website:</p>
+
 <ol>
     <li><a href="/js.html">JavaScript test page</a> — a page to quickly test JavaScript in your console; for when you want to quickly run some JavaScript, but your laptop isn't handy</li>
     <li><a href="/pendulum.html">Pendulum simulation</a> — quick simulation whipped up in roughly an hour during APPM class to test two models for the period of a pendulum arrived at via dimensional analysis; of course I spent another hour and a half prettying it up once I got to my room. <br> This was a very fun project, especially since I was able to make a graphical demo quite quickly when I last seriously programmed in JavaScript more than seven years ago <br> <strong>NOTE:</strong> This is an awful model, it was made during the first week of APPM class. At some point I plan on improving it. </li>
 </ol>
+
 ${footer();}$
