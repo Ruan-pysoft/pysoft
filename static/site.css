@@ -223,3 +223,23 @@ footer {
     display: none;
   }
 }
+
+.series-link-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.prev-link,
+.next-link {
+  white-space: nowrap;
+}
+
+.series-link-container a {
+  flex: 1;
+  text-align: left;
+}
+
+.series-link-container a.next-link {
+  text-align: right;
+}

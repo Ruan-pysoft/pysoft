@@ -1,11 +1,11 @@
-${page_title = "“Simple” Bash Hello World";}$
-${page_description = "Ruan's personal website - 'simple' hello world in bash";}$
-${header();}$
-        <h1>$(page_title)$</h1>
+${blog_article_begin("magickgreet");}$
+
         <p>Here is a quick-and-simple hello-world program for bash on Linux :)</p>
+
         <pre style="overflow:scroll"><code>#!/bin/sh
-t=$$(mktemp) printf 'global e\ne:\nmov rdi,0\nmov rsi,m\nmov rdx,l\nmov rax,1\nsyscall\nxor rdi,rdi\nmov rax,60\nsyscall\nm:db"Hello, world!",10\nl equ $-m\n' > $t && nasm -D e=_start -f elf64 $t -o "$t"0 && ld "$t"0 -o $t && $t</code></pre>
+export t=$$(mktemp) &amp;&amp; printf 'global e\ne:\nmov rdi,0\nmov rsi,m\nmov rdx,l\nmov rax,1\nsyscall\nxor rdi,rdi\nmov rax,60\nsyscall\nm:db"Hello, world!",10\nl equ $-m\n' > $t &amp;&amp; nasm -D e=_start -f elf64 $t -o "$t"0 &amp;&amp; ld "$t"0 -o $t &amp;&amp; $t</code></pre>
         <p>Simply put in inside a file (say, <code>hello_world.sh</code>), mark said file executable (<code>chmod +x hello_world.sh</code>), and run it to see the magic (<code>./hello_world.sh</code>)!</p>
         <p>Inspired by the first few minutes of the following video:</p>
         <div class="video-container"><iframe frameborder="0" src="https://www.youtube.com/embed/vcSijrRsrY0?t=360" title="Let&#39;s Create a Compiler (Pt.1)" allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-${footer();}$
+
+${blog_article_end();}$

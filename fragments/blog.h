@@ -11,6 +11,12 @@ typedef struct BlogEntry {
 
 static const BlogEntry blog_entries[] = {
     {
+        .id = "magickgreet",
+        .title = "“Simple” Bash Hello World",
+        .description = "a 'simple' hello world program in bash",
+        .pub_date = "2025-10-25",
+    },
+    {
         .id = "website",
         .title = "Finally, a website!",
         .description = "(TODO)",
@@ -56,6 +62,21 @@ void blog_article_begin(const char *id) {
 }
 
 void blog_article_end() {
+    const char *prev_link = blog_curr_article_idx > 0
+        ? temp_sprintf("<a href=\"/blog/%s\" class=\"prev-link\">← Previous entry | %s</a>", blog_entries[blog_curr_article_idx-1].id, blog_entries[blog_curr_article_idx-1].title)
+        : NULL;
+    const char *next_link = blog_curr_article_idx < ARRAY_LEN(blog_entries)-1
+        ? temp_sprintf("<a href=\"/blog/%s\" class=\"next-link\">%s | Next entry →</a>", blog_entries[blog_curr_article_idx+1].id, blog_entries[blog_curr_article_idx+1].title)
+        : NULL;
+
+    if (prev_link && next_link) {
+        printf("<div class=\"series-link-container\">%s — %s</div>", prev_link, next_link);
+    } else if (prev_link) {
+        printf("<div class=\"series-link-container\">%s</div>", prev_link);
+    } else if (next_link) {
+        printf("<div class=\"series-link-container\">%s</div>", next_link);
+    }
+
     footer();
 
     blog_curr_article_idx = SIZE_T_MAX;

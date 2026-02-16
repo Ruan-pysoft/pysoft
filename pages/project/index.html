@@ -1,0 +1,15 @@
+${page_title = "Projects";}$
+${page_description = "projects I am / was working on";}$
+${header();}$
+
+<h1>$(page_title)$</h1>
+
+<p>Currently, the following projects have pages on my site:</p>
+<ul>
+    ${for (size_t i = 0; i < projects_count; ++i) {}$
+        ${Project project = projects[i];}$
+        <li> <a href="/project/$(project.id)$">$(project.title)$</a> – <em>$(project.description)$</em> </li>
+    ${}}$
+</ul>
+
+${footer();}$

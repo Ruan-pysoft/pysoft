@@ -9,6 +9,7 @@ typedef struct NavLink {
 static const NavLink nav_links[] = {
     { "Home",          "/",         "link-home-nav", },
     { "JS Test",       "/js",       NULL, },
+    { "Projects",      "/project",  NULL, },
     { "Blog",          "/blog",     NULL, },
     { "About",         "/about",    NULL, },
 };
