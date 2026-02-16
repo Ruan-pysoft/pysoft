@@ -1,0 +1,3 @@
+[submodule "webgen"]
+	path = webgen
+	url = https://github.com/Ruan-pysoft/webgen.git

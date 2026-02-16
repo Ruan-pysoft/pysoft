@@ -1,0 +1,251 @@
+${page_title = "Pendulum";}$
+${page_description = "A quick-and-dirty pendulum simulation in JavaScript";}$
+${header();}$
+<!-- main repo: https://git.sr.ht/~ruan_p/js_pendulum_sim -->
+<!--
+This is free and unencumbered software released into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
+
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+For more information, please refer to <https://unlicense.org/>
+-->
+        <p>Yes, this can be improved significantly, this was made after only like three weeks of applied mathematics... I plan on updating it soon(-ish)</p>
+	    <p>A quick-and-dirty pendulum simulation to test the reasonableness of two models derived via dimensional analysis, made in my APPM class. Scroll past the picture to see the pendulum in action.</p>
+	    <p>Right at the bottom, I display the calculated constant factor for each model; a good model should have a, well, <em>constant</em> constant factor resulting in little variation.</p>
+	    <p>The models are meant to predict the period of the pendulum, and so the constant factor is calculated by comparing it to the calculated period from the simulation, which is updated every half-period (period = 2 × length of most recent half-period).</p>
+	    <p>You will see the traditional model correctly gets a constant of (very roughly) tau (or two pi), while the alternate model results in a varying "constant", meaning that it is not a good model (though perhaps given the <em>maximum</em> velocity and <em>maximum</em> tension, rather than the real-time values would result in a better model?)</p>
+	    <img src="$(image("pendulum_derivation.jpg"))$" alt="handwritten derivation of the two models" style="display: block; margin: 0 auto; max-width: 100%; height: auto;">
+	    <p>This is a quick public demo, for the up-to-date version visit the main repository at <a href="https://git.sr.ht/~ruan_p/js_pendulum_sim">~ruan_p/js_pendulum_sim</a>.</p>
+
+		<canvas id="draw" width=500 height=500> </canvas>
+
+		<p>
+			Δt = <span id="dtDisplay"></span> <br>
+			length = <span id="lDisplay"></span> <button onclick="l = prompt('Select new pendulum length', l);">adjust</button> <br>
+			radius = <span id="rDisplay"></span> <button onclick="r = prompt('Select new pendulum radius', r); V = 2/3 * Tau * r*r*r; m = (rho / 1000 * 100*100*100) * V;">adjust</button> <br>
+			mass = <span id="mDisplay"></span> <button onclick="m = prompt('Select new pendulum mass', m); V = m / (rho / 1000 * 100*100*100); r = Math.pow(V * 3/2 / Tau, 1/3);">adjust</button> <br>
+			gravitational acceleration = <span id="gDisplay"></span> <button onclick="g = prompt('Select new gravitational acceleration', g);">adjust</button> <br>
+			viscosity = <span id="muDisplay"></span> <button onclick="mu = prompt('Select new medium viscosity', mu);">adjust</button> <br>
+			θ = <span id="thetaDisplay"></span> <button onclick="theta = prompt('Select angle from the vertical (fraction of 90°)', theta / Tau * 4) * Tau / 4; prevDelta = 0;">move</button> <br>
+			θ<sub>max</sub> = <span id="maxAngleDisplay"></span> <br>
+			ω = <span id="omegaDisplay"></span> <button onclick="omega = prompt('Select new speed (rad/sec)', omega); prevTheta = theta - omega*prevDelta/1000;">push</button> <br>
+			period = <span id="tDisplay"></span> <br>
+			given t = C sqrt(l/g); C = <span id="model1Display"></span> <br>
+			given t = C(T/(v^2 μ)); C = <span id="model2Display"></span>
+
+		</p>
+
+		<script>
+// https://git.sr.ht/~ruan_p/js_pendulum_sim/tree/9b4f133220cf805c24d3e509bb716ef008dee815/item/main.js
+
+const Tau = 2 * 3.14159;
+
+function threeDigits(n) {
+    return Math.round(n * 1000) / 1000;
+}
+
+const metreFactor = 200; // pixels in a metre
+
+const anchorX = 250;
+const anchorY = 10;
+var l = 1; // m
+var r = 0.05; // m
+var V = 2/3 * Tau * r*r*r; // m^3
+// steel
+var rho = 7.85; // density (g/cm^3)
+var m = (rho / 1000 * 100*100*100) * V; // kg
+var g = 9.81; // m/s^2
+// air
+//var mu = 1.8e-5; // viscosity (Pa * s)
+// water
+//var mu = 1e-3; // viscosity (Pa * s)
+// fluid much more viscous than water needed to slow down a 4kg steel ball appreciably
+// sunflower oil (according to wikipedia)
+var mu = 0.04914; // viscosity (Pa * s)
+var theta = Tau/4 / 2; // angle from vertical (rad)
+var maxAngle = theta;
+var omega = 0; // angular velocity (rad/s)
+var t = NaN; // period (s)
+var lastInflection = NaN;
+
+function model1() {
+	const predictedT = Math.sqrt(l/g) * 1000; // working in milliseconds
+	const constant = t/predictedT;
+
+	return constant;
+}
+function model2() {
+	const v = omega * l;
+	// tension = outwards pull from gravity - inwards force from simple harmonic motion
+	// (assumes simple harmonic motion)
+	const tension = m*g*Math.cos(theta) - m*v*v/l;
+	const predictedT = (tension/v/v/mu) * 1000; // working in milliseconds
+	const constant = t/predictedT;
+
+	return constant;
+}
+
+var prevTheta = theta; // angle from vertical (rad)
+var prevDelta = 0;
+function physics(delta, time) {
+	const dt = delta / 1000;
+	const pdt = prevDelta / 1000;
+
+	const prevOmega = omega;
+
+	// viscous drag (angular damping coefficient)
+	// From Stokes' law (https://en.wikipedia.org/wiki/Stokes'_law)
+	const v = omega * l;
+	const F_d = -3 * Tau * mu * r * v;
+	// convert to torque
+	const T_d = F_d * l;
+
+	// gravity tangent to pendulum line (in the direction of the motion)
+	const F_g = - m * g * Math.sin(theta);
+	// convert to torque
+	const T_g = F_g * l;
+
+	// acceleration = force/mass
+	// or in this case, angular acceleration = torque/mass
+	const alpha = (T_g + T_d) / m;
+
+
+	// use Verlet integration (https://en.wikipedia.org/wiki/Verlet_integration#Non-constant_time_differences)
+	// rather than simple Euler integration
+	const oldTheta = theta;
+	if (pdt === 0) {
+		theta += omega*dt + 0.5*alpha*dt*dt;
+	} else {
+		theta += (theta - prevTheta)*(dt/pdt) + alpha*dt*(dt + pdt)/2;
+	}
+	prevTheta = oldTheta;
+	prevDelta = delta;
+
+	omega = (theta - prevTheta)/dt;
+
+	if ((omega < 0) != (prevOmega < 0)) {
+		t = time - lastInflection;
+		t *= 2; // only half a period has occurred since last local maximum height
+		lastInflection = time;
+
+		maxAngle = Math.max(Math.abs(theta), Math.abs(prevTheta));
+	}
+}
+
+function display(delta) {
+	const dtDisplay = document.getElementById("dtDisplay");
+	dtDisplay.innerHTML = (delta / 1000) + "s";
+	const lDisplay = document.getElementById("lDisplay");
+	lDisplay.innerHTML = l + "m";
+	const rDisplay = document.getElementById("rDisplay");
+	rDisplay.innerHTML = threeDigits(r) + "m";
+	const mDisplay = document.getElementById("mDisplay");
+	mDisplay.innerHTML = threeDigits(m) + "kg";
+	const gDisplay = document.getElementById("gDisplay");
+	gDisplay.innerHTML = g + "m/s²";
+	const muDisplay = document.getElementById("muDisplay");
+	muDisplay.innerHTML = mu + "Pa s";
+	const thetaDisplay = document.getElementById("thetaDisplay");
+	thetaDisplay.innerHTML = threeDigits(theta) + " rad";
+	const maxAngleDisplay = document.getElementById("maxAngleDisplay");
+	maxAngleDisplay.innerHTML = threeDigits(maxAngle) + " rad";
+	const omegaDisplay = document.getElementById("omegaDisplay");
+	omegaDisplay.innerHTML = threeDigits(omega) + " rad/s";
+	const tDisplay = document.getElementById("tDisplay");
+	tDisplay.innerHTML = (t / 1000) + "s";
+	const model1Display = document.getElementById("model1Display");
+	model1Display.innerHTML = threeDigits(model1());
+	const model2Display = document.getElementById("model2Display");
+	model2Display.innerHTML = threeDigits(model2());
+}
+
+const backbuffer = document.createElement("canvas");
+var displayTimer = 0;
+function draw(canvas, delta, time) {
+	const ctx = canvas.getContext("2d");
+	const backCtx = backbuffer.getContext("2d");
+
+	backCtx.clearRect(0, 0, canvas.width, canvas.height);
+	backCtx.drawImage(canvas, 0, 0);
+
+	if (delta == 0) return;
+	if (delta > 100) {
+		// don't bother with calculations for intervals >= 0.1s,
+		// as it will be completely inaccurate
+		return;
+	}
+
+	physics(delta, time);
+
+	displayTimer += delta;
+	if (displayTimer >= 100) {
+		display(delta);
+		displayTimer -= 100;
+	}
+
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.globalAlpha = 0.9;
+	ctx.drawImage(backbuffer, 0, 0);
+	ctx.globalAlpha = 1;
+
+	const x = anchorX + l*metreFactor*Math.sin(theta);
+	const y = anchorY + l*metreFactor*Math.cos(theta);
+
+	ctx.strokeStyle = "white";
+	ctx.lineWidth = 2;
+	ctx.beginPath();
+	ctx.moveTo(anchorX, anchorY);
+	ctx.lineTo(x, y);
+	ctx.stroke();
+
+	ctx.strokeStyle = "black";
+	ctx.lineWidth = 1;
+	ctx.fillStyle = "red";
+	ctx.beginPath();
+	ctx.ellipse(x, y, r*metreFactor, r*metreFactor, 0, 0, Tau);
+	ctx.stroke();
+	ctx.fill();
+}
+
+function init() {
+	const canvas = document.getElementById("draw");
+	backbuffer.width = canvas.width;
+	backbuffer.height = canvas.height;
+
+	var t = Date.now();
+
+	setInterval(function() {
+		var dt = Date.now() - t;
+		t += dt;
+		draw(canvas, dt, t);
+	}, 17); // 17ms ~ 60fps
+}
+
+init();
+		</script>
+${license_extra = }$$"
+        <p>
+            This webpage (as well as the accompanying JavaScript and image) is set free under the <a href="https://unlicense.org">Unlicense</a>. <br>
+            You may view the unlicense embedded into the source for this page at <a href="view-source:https://pysoft.co.za/js.html">view-source:https://pysoft.co.za/js.html</a> (you <em>might</em> need to copy-paste that link in some browsers, rather than just clicking?)
+        </p>
+"$${;}$
+${footer();}$

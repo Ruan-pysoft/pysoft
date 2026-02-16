@@ -1,0 +1,225 @@
+html {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0 auto;
+  height: 100%;
+  width: 100%;
+  font-weight: 300;
+  letter-spacing: normal;
+  word-spacing: normal;
+  font: 15px "Source Sans Pro", "Calibri", "Helvetica", "Arial", "Freesans", "Clean", sans-serif;
+  line-height: 1.4;
+  hyphens: auto;
+  text-align: justify;
+  background-color: #101820;
+  color: #bbc;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #dee;
+  font-family: "Times New Roman", serif;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+}
+
+h1 {
+  text-align: center;
+}
+
+p {
+  color: #ccc;
+  font-size: 16px;
+}
+
+#page-getting-started .unstyled li a::before {
+  content: none;
+}
+
+footer p {
+  font-size: 0.8em;
+  line-height: 1em;
+  margin: 5px 0;
+}
+
+nav#navbar {
+  overflow: hidden;
+  border-bottom: 1px solid black;
+  background-color: #333;
+  overflow: hidden;
+  padding: 0.5em;
+  padding-inline: 1.5em;
+}
+
+nav#navbar a {
+  float: right;
+  color: #f2f2f2;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: "Times New Roman", serif;
+  font-size: 120%;
+  margin: 0.2em;
+}
+
+nav#navbar a#link-home-nav {
+  float: left;
+  font-size: 150%;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+  display: block;
+}
+
+a {
+  background: transparent;
+}
+
+a,
+a:visited {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+a:hover,
+a:visited:hover {
+  text-decoration: underline;
+}
+
+a[href^="http://"]:before,
+a[href^="https://"]:before,
+a[href^="ftp://"]:before,
+a[href^="sftp://"]:before {
+  content: "🌐";
+}
+
+a[href^="gemini://"]:before {
+  content: "♊";
+}
+
+a[href^="gopher://"]:before {
+  content: "🕳️";
+}
+
+a[href^="mailto:"]:before {
+  content: "📧";
+}
+
+a[href^="magnet://"]:before {
+  content: "🧲";
+}
+
+a[href^="tel:"]:before {
+  content: "📞";
+}
+
+a[href^="git@"]:before {
+  content: "🔥";
+}
+
+a[href*="news.ycombinator.com"]:before {
+  content: "📰";
+}
+
+a[href*="vimeo.com"]:before,
+a[href*="youtube.com"]:before,
+a[href*="youtu.be"]:before {
+  content: "📺";
+}
+
+a[href*="wikipedia.org"]:before,
+a[href*="wiktionary.org"]:before {
+  content: "📖";
+}
+
+#footer a:before {
+  content: "";
+}
+
+a[href="#document-top"] {
+  vertical-align: super;
+  font-weight: normal;
+  font-size: 15px;
+  float: right;
+}
+
+#footer a:hover {
+  text-decoration: none;
+}
+
+#footer a:after {
+  content: none;
+}
+
+main {
+  margin-top: 1em;
+}
+
+@media screen and (max-width: 659px) {
+  main {
+    width: 95%;
+    padding-left: 2.5%;
+  }
+}
+
+@media screen and (min-width: 660px) and (max-width: 999px) {
+  main {
+    width: 80%;
+    padding-left: 10%;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  main {
+    width: 800px;
+    padding-left: calc((100% - 800px) / 2);
+  }
+}
+
+footer {
+  margin: auto;
+  text-align: center;
+}
+
+.footnote-ref::before,
+.footnote-backref::before {
+  content: none;
+}
+
+.footnote {
+  display: block;
+  border: 1px solid white;
+  padding: 0.1em 0.2em;
+  border-radius: 0.2em;
+  margin: 0.5em 3em;
+
+  font-size: 14px;
+}
+
+@media print {
+  .footnote {
+    border-color: black;
+    border-width: 2px;
+  }
+
+  .footnote-label {
+    display: none;
+  }
+}

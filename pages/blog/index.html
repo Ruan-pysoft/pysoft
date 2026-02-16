@@ -1,0 +1,13 @@
+${page_title = "Ruan's Blog";}$
+${page_description = "index page of Ruan's personal blog: programming, maths, language, philosophy, theology, and more! ..eventually, that is";}$
+${header();}$
+<h1>$(page_title)$</h1>
+<p>This is my blog.</p>
+<ul>
+    ${// Iterate over blog entries in reverse order so that the newest entry comes first;}$
+    ${size_t i = blog_entries_count; while (i --> 0) {}$
+	${BlogEntry entry = blog_entries[i];}$
+	<li> <a href="/blog/$(entry.id)$">$(entry.pub_date)$ – $(entry.title)$</a> </li>
+    ${}}$
+</ul>
+${footer();}$

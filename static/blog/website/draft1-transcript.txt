@@ -1,0 +1,657 @@
+┬─[ruan@melkkos:~/Documents/programmeering/c/website_gen/static/blog/builder]─[pts/3]─[Sun 26-02-15 02:55:45]
+╰─> 0 (git)[master] % whisper-cli -f draft1.wav -m ~/install/whisper.cpp/models/ggml-base.en.bin 
+whisper_init_from_file_with_params_no_state: loading model from '/home/ruan/install/whisper.cpp/models/ggml-base.en.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+whisper_init_with_params_no_state: devices    = 1
+whisper_init_with_params_no_state: backends   = 1
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51864
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 512
+whisper_model_load: n_audio_head  = 8
+whisper_model_load: n_audio_layer = 6
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 512
+whisper_model_load: n_text_head   = 8
+whisper_model_load: n_text_layer  = 6
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 2 (base)
+whisper_model_load: adding 1607 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:          CPU total size =   147.37 MB
+whisper_model_load: model size    =  147.37 MB
+whisper_backend_init_gpu: device 0: CPU (type: 0)
+whisper_backend_init_gpu: no GPU found
+whisper_init_state: kv self size  =    6.29 MB
+whisper_init_state: kv cross size =   18.87 MB
+whisper_init_state: kv pad  size  =    3.15 MB
+whisper_init_state: compute buffer (conv)   =   16.28 MB
+whisper_init_state: compute buffer (encode) =   23.09 MB
+whisper_init_state: compute buffer (cross)  =    4.66 MB
+whisper_init_state: compute buffer (decode) =   96.37 MB
+
+system_info: n_threads = 4 / 4 | WHISPER : COREML = 0 | OPENVINO = 0 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | OPENMP = 1 | REPACK = 1 | 
+
+main: processing 'draft1.wav' (46770176 samples, 2923.1 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+
+[00:00:00.000 --> 00:00:11.560]   So, and finally, after years of owning the domain, and years of planning to put the website
+[00:00:11.560 --> 00:00:18.480]   up, have a functional website, so how did that happen?
+[00:00:18.480 --> 00:00:19.980]   Interesting.
+[00:00:19.980 --> 00:00:29.200]   So, the thing is, when it comes to the internet, I'm relatively minimalist, I don't like having
+[00:00:29.200 --> 00:00:36.120]   a ton of JavaScript, or a ton of resources that's clogging up my downloads, like my upload
+[00:00:36.120 --> 00:00:38.360]   speed, my download speed.
+[00:00:38.360 --> 00:00:48.200]   Yeah, it's just awful if I'm sitting with semi-reliable Wi-Fi, and I try to access text
+[00:00:48.200 --> 00:00:54.960]   on your website, and I can't get to the text, because you're downloading a bajillion megabytes
+[00:00:54.960 --> 00:01:02.440]   of random JavaScript, and random images which you don't need.
+[00:01:02.440 --> 00:01:11.880]   So, I've always wanted, you know, a related to the same text-based website, and maybe a
+[00:01:11.880 --> 00:01:16.800]   bit of JavaScript here and there if I want to make some sort of a toy or a demo, but
+[00:01:16.800 --> 00:01:19.600]   I don't want my website to be reliant on JavaScript.
+[00:01:19.600 --> 00:01:27.160]   Okay, so, like, not that a big deal, there's plenty of ways to do it.
+[00:01:27.160 --> 00:01:32.760]   One thing I definitely don't want to do is, like, write some sort of react app or something
+[00:01:32.760 --> 00:01:37.840]   that's running on the server side, because, like, really, I don't need that.
+[00:01:37.840 --> 00:01:43.240]   I mostly just want static text, so I wanted a static site, right?
+[00:01:43.240 --> 00:01:49.080]   I don't know, maybe, like, a PHP page or something would be decent, but, like, I don't want a
+[00:01:49.080 --> 00:01:50.560]   dynamic to generate a site.
+[00:01:50.560 --> 00:01:51.560]   I don't need it.
+[00:01:51.560 --> 00:01:53.840]   I basically want a blog.
+[00:01:53.840 --> 00:01:57.560]   I don't know how many blog pages I'm going to write, but, like, I basically, like, want
+[00:01:57.560 --> 00:02:01.480]   to blog in and about me and projects.
+[00:02:01.480 --> 00:02:07.560]   So, yeah, so, so now, it was just taking up a static site.
+[00:02:07.560 --> 00:02:13.760]   Well, one way you can do it, one way that always felt a bit attractive is to just write
+[00:02:13.760 --> 00:02:16.280]   HTML by hand.
+[00:02:16.280 --> 00:02:25.400]   One of this is, it gets really annoying, especially if I want some sort of element across the
+[00:02:25.400 --> 00:02:33.200]   site that stays consistent, for example, a header, a nav bar, right, because if I update
+[00:02:33.200 --> 00:02:38.760]   my nav bar text in one page, I have to update it in one of them, and am I going to remember
+[00:02:38.760 --> 00:02:45.320]   every single page where I have that element, and this, in general, is going to be very annoying,
+[00:02:45.320 --> 00:02:46.320]   so, yeah.
+[00:02:46.320 --> 00:02:50.280]   So, just like having a consistent style, and, like, I don't know, I might want to generate
+[00:02:50.280 --> 00:02:57.440]   an RSA speed of my blog post, and that, for example, can't really do that if, I mean,
+[00:02:57.440 --> 00:03:02.840]   I can manually write an RSA speed, just not my cup of tea.
+[00:03:02.840 --> 00:03:09.480]   So, in all various solutions, I mean, I'm really sure I can use Django, Flask, as a static
+[00:03:09.480 --> 00:03:14.520]   site generator if I really wanted to, I'm not sure, but I'm pretty sure, at some point,
+[00:03:14.520 --> 00:03:22.160]   I looked into that, but, yeah, so, well, if I want to do that, I want some sort of, like,
+[00:03:22.160 --> 00:03:28.160]   attempt at it, or scripting, and I definitely wanted multilingual support, because I am
+[00:03:28.160 --> 00:03:36.280]   bialingual, so I want to write content in both English and Afrikaans, and I'm very much
+[00:03:36.280 --> 00:03:42.520]   am planning on learning more languages, and we'll probably at some point want to create
+[00:03:42.520 --> 00:03:48.520]   pages of different languages on my site, so I wanted something that allowed me to be multilingual
+[00:03:48.520 --> 00:03:59.600]   with him, and I also wanted control, a certain measure of control over my page, yeah, so,
+[00:03:59.600 --> 00:04:07.400]   like, for example, if I wanted to generate the table of content, and I want to be able
+[00:04:07.400 --> 00:04:16.480]   to control the names of the HTML that's generated, so mostly, like, HTML time thinking, although
+[00:04:16.480 --> 00:04:23.240]   if I could write something like Markdown and generate HTML from that, that would, of course,
+[00:04:23.240 --> 00:04:32.600]   be great, because writing HTML isn't the greatest experience always, but it's doable,
+[00:04:32.600 --> 00:04:42.760]   if you need to be. So, over the years, I have tried to get my website up multiple times,
+[00:04:42.760 --> 00:04:53.640]   but another thing, another facet of my personality, which pays a part in this, is that I am somewhat
+[00:04:53.640 --> 00:05:03.160]   a perfectionistic, and I also want to understand everything that's happening, and I frequently
+[00:05:03.160 --> 00:05:11.000]   like reinventing the wheel, so, for example, I really dislike using IDEs, especially when
+[00:05:11.000 --> 00:05:17.960]   learning a language, because they hide away and abstract of what you're doing, for example,
+[00:05:17.960 --> 00:05:25.040]   if I am using Java IDE and turning it to create a Java project for me, and turning it to run
+[00:05:25.040 --> 00:05:31.200]   my program, I do not know what the command is to compile my program, I do not know what
+[00:05:31.200 --> 00:05:36.600]   the command is to run my program, I do not know what command line tags are used for devac
+[00:05:36.600 --> 00:05:41.800]   and release codes, I want to know all of that, I also frequently do not know exactly what
+[00:05:41.800 --> 00:05:47.720]   the project structure is, and where all the files should go, because my IDE is managing
+[00:05:47.720 --> 00:05:53.440]   that for me, and I find this incredibly annoying, which is one of the reasons I have struggled
+[00:05:53.440 --> 00:05:59.880]   to learn Java up to now, because most of the tutorials start with create a project in your
+[00:05:59.880 --> 00:06:09.240]   IDE, luckily this semester at university, we are writing programs in our pay plus class
+[00:06:09.240 --> 00:06:16.000]   and compiling them from the command code, so I reckon this method of learning Java is
+[00:06:16.000 --> 00:06:23.600]   much more fitting to my personality than the typical tutorials available on the internet,
+[00:06:23.600 --> 00:06:33.120]   but that is the side of the point, my struggles learn Java, how does this come into building
+[00:06:33.120 --> 00:06:41.960]   a website, the thing is I have tried many statistics I generated, I want to try to remember
+[00:06:41.960 --> 00:06:47.560]   what all of them are, many of them are quite interesting, problem is a lot of them are
+[00:06:47.560 --> 00:06:52.640]   a bit opinionated about the structure of your site, and the thing is I also want to
+[00:06:52.640 --> 00:07:02.880]   do stuff my way, so I want to put the pages wherever I want to put them, I do not want
+[00:07:02.880 --> 00:07:11.040]   my pages going with a static type generator, it tells me to put them, yes, so that rules
+[00:07:11.040 --> 00:07:21.240]   out a whole host of static type generators, and many of them are more popular ones certainly,
+[00:07:21.240 --> 00:07:29.800]   alright, for many of them I can figure out how to do whatever I want, typically if you
+[00:07:29.800 --> 00:07:34.360]   are trying to do something completely different from the software you're using how they want
+[00:07:34.360 --> 00:07:44.040]   you to do it, it does make the experience slightly more difficult, so I've also tried,
+[00:07:44.040 --> 00:07:48.040]   and like my other problem I've had is that many of these static type generators allows
+[00:07:48.040 --> 00:07:55.960]   you to write Markdown or some or whatever, but then they create the HTML in a certain
+[00:07:55.960 --> 00:08:01.640]   structure which they want, they don't just let you dictate exactly how the surrounding
+[00:08:01.640 --> 00:08:08.160]   HTML should look, but I understand that if I write hash header it's going to generate
+[00:08:08.160 --> 00:08:16.720]   an H1 tag, I have no problem with that, but what I do want you to be able to do is write
+[00:08:16.720 --> 00:08:22.800]   my blog post in Markdown and have complete control about what does the HTML header look
+[00:08:22.800 --> 00:08:28.000]   like, which typically I don't, it includes all sorts of CSS and all sorts of stuff I
+[00:08:28.000 --> 00:08:33.720]   don't understand, you just put in the header for me, which I don't need it, and it's just
+[00:08:33.720 --> 00:08:40.520]   a text page, like really please, you can keep it a bit more basic than that.
+[00:08:40.520 --> 00:08:45.760]   And then even the more basic ones, I remember there was quite a nice static side generator
+[00:08:45.760 --> 00:08:52.520]   which I believe was written in NEM, which came with its own like translating engine and all
+[00:08:52.520 --> 00:09:05.680]   of that, however, one thing I found in that translating engine is I'm not going to actually
+[00:09:05.680 --> 00:09:22.360]   have to remember, I don't know, there was some issue with the templating engine.
+[00:09:22.360 --> 00:09:36.680]   What was the issue with the templating engine, that is the question, yeah, that person, I
+[00:09:36.680 --> 00:09:44.840]   don't know, I can't remember at the moment, and see if I remember that, anyways, issue
+[00:09:44.840 --> 00:09:50.040]   with the templating engine, didn't like it for some reason, blah blah blah, completely
+[00:09:50.040 --> 00:10:03.420]   lost the train of thought, un-ba-ba, templating engine, yeah, but didn't work out.
+[00:10:03.420 --> 00:10:08.680]   Then I have also tried various times to write my own static side generator typically in
+[00:10:08.680 --> 00:10:14.880]   Python, because for the longest time that's the program language, I was the most familiar
+[00:10:14.880 --> 00:10:21.460]   with and like the most, although when I learned C++, I like it more than Python because of
+[00:10:21.460 --> 00:10:28.240]   the general guarantees that static typing gives you, it catches all sorts of errors at compile
+[00:10:28.240 --> 00:10:34.160]   time, which otherwise you'd have to just catch by running the program, which I find rather
+[00:10:34.160 --> 00:10:44.400]   annoying once it's been introduced to me that another way is available.
+[00:10:44.400 --> 00:10:53.560]   But the problem with C++ is that I learned C++ for competitive programming, so I'm not
+[00:10:53.560 --> 00:11:02.160]   really familiar with how to use libraries in C++, all way to do closely with libraries,
+[00:11:02.160 --> 00:11:08.360]   and in general it is quite good and easy to get something set up and running with Python
+[00:11:08.360 --> 00:11:15.160]   with C++, at least in my experience, Python is after all a scripting language where C++
+[00:11:15.160 --> 00:11:26.240]   is, I think it's generally considered as systems language, lower level than Python certainly.
+[00:11:26.240 --> 00:11:32.000]   So I've tried various times writing in Python, I've tried writing my own Markdown process,
+[00:11:32.000 --> 00:11:39.600]   I've tried using Markdown process from libraries, but always inevitably I would end up creating
+[00:11:39.600 --> 00:11:45.900]   some sort of over-complicated, over-engineered solution, which doesn't necessarily work that
+[00:11:45.900 --> 00:11:53.120]   great, and two weeks later I have another interesting project which distracts my attention,
+[00:11:53.120 --> 00:11:58.440]   especially because it's not fun working on it any longer, because it is over-complicated
+[00:11:58.440 --> 00:12:03.160]   and over-engineered and maintainable.
+[00:12:03.160 --> 00:12:12.360]   But now, at last, I have created a static side generator in C, it was created entirely
+[00:12:12.360 --> 00:12:19.120]   by myself, so I have complete control, and do not do control over and knowledge of how
+[00:12:19.120 --> 00:12:25.640]   it works, and yeah, I can add a few changes how much I want, I know the one static side
+[00:12:25.640 --> 00:12:29.920]   generator might have been heist decides, it might have been the other one in them, courtroom
+[00:12:29.920 --> 00:12:30.920]   and beggar.
+[00:12:30.920 --> 00:12:37.440]   Now it was the one in them, I'm pretty sure, yes, anyways, the one static side generator
+[00:12:37.440 --> 00:12:44.080]   type, really nice, overall, I love that, but just a certain feature I wanted, and I couldn't
+[00:12:44.080 --> 00:12:52.040]   do it with what was provided to me, so I would have to, well, contribute my own face to the
+[00:12:52.040 --> 00:12:59.480]   source code, and I spent the day or two trying to figure that out, and, well, I didn't quite
+[00:12:59.480 --> 00:13:05.640]   understand what was going on in the source code, and I didn't quite know how I explained
+[00:13:05.640 --> 00:13:07.800]   it to do what I wanted to do.
+[00:13:07.800 --> 00:13:15.240]   I suspected I had to do with, yes, I believe the language tag, I don't think there's a
+[00:13:15.240 --> 00:13:22.560]   tag for your language, but like it's an attribute in the HTML, or like a native tag of something,
+[00:13:22.560 --> 00:13:28.800]   which would say the language of the page, and I typically this would be EN for English
+[00:13:28.800 --> 00:13:36.800]   or NUS for U.S. English, or I think those two are the most common on English language
+[00:13:36.800 --> 00:13:45.200]   websites, or web pages as it may be, and so they just had the default, but if I write
+[00:13:45.200 --> 00:13:50.960]   a page in Afrikaans, I don't want the metadata saying that it's an English page, I want the
+[00:13:50.960 --> 00:13:57.400]   metadata saying that it's an Afrikaans page because it's an Afrikaans page, you know,
+[00:13:57.400 --> 00:14:08.120]   so I spent some time trying to figure that out, and it was pretty hard-coded in there,
+[00:14:08.120 --> 00:14:15.320]   and then I contributed to someone else's program in front of respect to have a project of that
+[00:14:15.320 --> 00:14:21.120]   tag for who works, I need to do something proper, and I couldn't figure out how to do
+[00:14:21.120 --> 00:14:27.000]   something proper, so I also gave up with that one.
+[00:14:27.000 --> 00:14:31.680]   Now I might be remembering, actually, from the normal one, that the templating work
+[00:14:31.680 --> 00:14:37.800]   really nice, it's just this language issue that got me, but yeah, so I believe in my
+[00:14:37.800 --> 00:14:46.200]   blog, my pages are by default going to be in ZA for South African English, and then we're
+[00:14:46.200 --> 00:14:53.080]   appropriate, it would either be Af, so AF for Afrikaans would be Af-ZA, so South African
+[00:14:53.080 --> 00:14:58.560]   Afrikaans, not that, I mean, okay, Afrikaans is spoken in Namibia, I don't know if that's
+[00:14:58.560 --> 00:15:04.200]   really that much of a different variety, to be famous of Afrikaans is spoken in Namibia
+[00:15:04.200 --> 00:15:10.880]   as with my cousin, but I don't think they speak a very much different Afrikaans, honestly,
+[00:15:10.880 --> 00:15:18.440]   I think South African Afrikaans is actually a bit stupid because I'm pretty sure Afrikaans
+[00:15:18.440 --> 00:15:23.640]   they speak in the Cape is more different from Afrikaans I speak than the Afrikaans they
+[00:15:23.640 --> 00:15:31.880]   speak in Namibia, so it would be more accurate to say like Cape Afrikaans versus Transfall
+[00:15:31.880 --> 00:15:42.240]   Afrikaans versus I'm not familiar with all the varieties, I mostly just know that my
+[00:15:42.240 --> 00:15:53.200]   own Transfall dialect and the Cape dialect, but yes, point being default probably going
+[00:15:53.200 --> 00:15:58.040]   to be South African English because I do not speak American English, nor do I speak British
+[00:15:58.040 --> 00:16:03.600]   English, my English typically tends to be more British than American, but it is very
+[00:16:03.600 --> 00:16:10.280]   much a South African English, although it's a very mixed sort of an English from all sorts
+[00:16:10.280 --> 00:16:17.360]   of sources, especially my accent, I don't know about the words I use, but my accent I
+[00:16:17.360 --> 00:16:26.120]   know it's quite mixed, although still recognizably off-records, but I get an topic once again
+[00:16:26.120 --> 00:16:38.640]   yep, that's the way it is, whereas yeah, staticsites don't work, so I finally written something
+[00:16:38.640 --> 00:16:45.440]   in C and it works great, it's inspired by the one sorting video I saw where he wrote
+[00:16:45.440 --> 00:16:53.200]   a stat, well, it was a play example if I remember correctly, but he wrote his own staticsite
+[00:16:53.200 --> 00:17:01.240]   lyrics, so thanks to Lee and Jai, and Jai has awesome compile time capabilities, but you
+[00:17:01.240 --> 00:17:07.680]   know, I was thinking, why can't I do that in C, and like I was not only inspired by his
+[00:17:07.680 --> 00:17:17.440]   example in Jai, which I'll add a link to the blog post, also, what was it, also he's
+[00:17:17.440 --> 00:17:24.660]   Norbert H, no bold, which is the bold system that he typically uses for C programs, and
+[00:17:24.660 --> 00:17:31.040]   I've also find myself using, which is essentially a header on the library that allows you to
+[00:17:31.040 --> 00:17:37.760]   write both scripts whole C in the scene, so now I am using C to compile my C, link my
+[00:17:37.760 --> 00:17:47.040]   C programs, and I have also, is it for my operating system on using my kernel, operating
+[00:17:47.040 --> 00:17:53.200]   system is misleading, can't really do a lot of operating system things, even calling it
+[00:17:53.200 --> 00:18:02.160]   a kernel is misleading, it's more like a bare metal program that's there for demo purposes,
+[00:18:02.160 --> 00:18:05.320]   I don't know, I don't know if I'm going to discuss this in the blog post, I don't know
+[00:18:05.320 --> 00:18:11.080]   if I'm going to link it, I am considering uploading this voice recording as like the
+[00:18:11.080 --> 00:18:18.840]   source of the blog post, slash a first draw, and then I will be confused, but like I believe
+[00:18:18.840 --> 00:18:27.360]   on GitHub it's a CPP demo kernel, I'm pretty sure, so I originally intended it as my CMPG
+[00:18:27.360 --> 00:18:37.560]   121 project, kernel roughly written in C++ with demo quote unquote "programs", but they
+[00:18:37.560 --> 00:18:41.160]   are not really programs because they vault into the current, I mean I guess they are
+[00:18:41.160 --> 00:18:50.600]   programs, but like they are all compiled into the single binary, but yeah, so I definitely
+[00:18:50.600 --> 00:18:56.120]   could have done it in the two weeks, I think like the majority of the work was done over
+[00:18:56.120 --> 00:19:02.440]   a period of two weeks, it's just I really got stuck getting keyboard input for like two
+[00:19:02.440 --> 00:19:09.440]   days, I did like nothing except trying to get keyboard input to working, like I did not
+[00:19:09.440 --> 00:19:15.880]   work on my mess, I did not work on my stats, I did not work on my applied mess, and I actually
+[00:19:15.880 --> 00:19:23.760]   like some of the class tests I wrote my grades suffered, I sometimes I prefer focus which
+[00:19:23.760 --> 00:19:33.240]   isn't good, but yeah, and I was getting quite in a bit of a meaningful state because of
+[00:19:33.240 --> 00:19:39.160]   that, but the top state, so I just said break, we are not doing this, because I mean quite
+[00:19:39.160 --> 00:19:43.080]   honestly if I continued I'd probably be stuck for the rest of the week because like my mind
+[00:19:43.080 --> 00:19:49.120]   was just stuck in a rat, so then I put that one aside and wrote a mini-platformer game
+[00:19:49.120 --> 00:19:55.200]   with Raylov, very fun, it's still a bit sad, I've done a lot of pretty interesting things
+[00:19:55.200 --> 00:20:00.240]   because that's a lot cooler, well to me to a programming nerd it's cooler, so the average
+[00:20:00.240 --> 00:20:06.560]   guy on the street the game is probably cooler, but yeah, so I still need to finish it, I
+[00:20:06.560 --> 00:20:14.520]   am so close to making a V1, but anyways, I am getting off topic again, I am very distractible,
+[00:20:14.520 --> 00:20:22.520]   when I am speaking I am very distractible, in general I am very distractible though, like
+[00:20:22.520 --> 00:20:34.080]   it's mostly in my head, but I am very distractible, but anyways, yes, so I believe I use knob.h
+[00:20:34.080 --> 00:20:39.520]   to compile that, unless it's for my game, it might be for my game, one of them I am using
+[00:20:39.520 --> 00:20:44.520]   knob.h, the other one I am trying to switch over to knob.h, call it a number which is
+[00:20:44.520 --> 00:20:50.960]   which could be either, no, it must be my game, because I remember there was a problem when
+[00:20:50.960 --> 00:20:56.360]   I included knob.h, my github showed that my majority of my code was C code, and then
+[00:20:56.360 --> 00:21:01.360]   I would have not passed as a project, because the majority had to be C++, so I edited it
+[00:21:01.360 --> 00:21:07.520]   as a Gibbs sub-module, so the code in the Gibbs sub-module doesn't count, it was in
+[00:21:07.520 --> 00:21:12.520]   total code, and if somebody else is called like this, I am writing a sub-module, and
+[00:21:12.520 --> 00:21:17.520]   then hiding it from a precursor, no, if somebody else is called, it's an external library, it
+[00:21:17.520 --> 00:21:21.520]   doesn't count, and it's a external library which isn't even linked into my final thing,
+[00:21:21.520 --> 00:21:26.520]   it's just in the support of the program. But anyway, I don't know why I am so defensive
+[00:21:26.520 --> 00:21:35.520]   about this, probably no one is even going to listen to this, but yeah, so yeah, knob.h,
+[00:21:35.520 --> 00:21:41.520]   I know in the one knob.h, yes, I did it two stage bolts, yes, for my game, actually, yes,
+[00:21:41.520 --> 00:21:46.520]   for my game, I think it's my operating system where I installed transitioning over to it,
+[00:21:46.520 --> 00:21:53.520]   or I tried to and I gave up for now, but anyway, so what I was doing in that knob.h script,
+[00:21:53.520 --> 00:22:03.520]   right, is rather than compiling the program, I created a bold script using knob.h, and
+[00:22:03.520 --> 00:22:13.520]   I created a config.h file which is included in the bold script, and then, yeah, I am
+[00:22:13.520 --> 00:22:19.520]   pretty sure, I only need to go and double take it, I'm walking around on university grounds,
+[00:22:19.520 --> 00:22:25.520]   talking to myself like a crazy person, my laptop's in my bag, so I can't check at the moment.
+[00:22:25.520 --> 00:22:30.520]   Also, this is supposed to be like a very rough draft for my blog post, I feel like I've
+[00:22:30.520 --> 00:22:36.520]   played with topic, because typing it, I've tried typing this hello world blog post, that
+[00:22:36.520 --> 00:22:44.520]   was several weeks ago, I suffer from the arthritis block, but I'm just going to have a spoken
+[00:22:44.520 --> 00:22:51.520]   first draft, because I know I can send 40 minute voice notes, I know this, so I'm just
+[00:22:51.520 --> 00:22:56.520]   sending myself, I'm using the record app, not words, but I'm sending myself a long voice
+[00:22:56.520 --> 00:23:02.520]   note, because I know I can speak semi coherent nonsense, and I just need to tighten it up
+[00:23:02.520 --> 00:23:04.520]   into a blog post, you know.
+[00:23:04.520 --> 00:23:09.520]   So, basically, this is just taking the first draft down, so that I have something to work
+[00:23:09.520 --> 00:23:16.520]   with, and then when I have a third part post, working, and I'm going to spread my SSD into
+[00:23:16.520 --> 00:23:22.520]   the SSD repo and the website content repo, and I'm going to generate my website, and then
+[00:23:22.520 --> 00:23:26.520]   I'm going to be happy, and then I'm going to figure out how the hell do I upload this into
+[00:23:26.520 --> 00:23:27.520]   cPanel.
+[00:23:27.520 --> 00:23:34.520]   Probably not that difficult, but I need to find a way that's easy to do to replace the content
+[00:23:34.520 --> 00:23:40.520]   of my website with a new content query, I don't want it to be like a big manual difficult
+[00:23:40.520 --> 00:23:41.520]   thing.
+[00:23:41.520 --> 00:23:48.520]   Probably not going to run this whole thing, because it's like too much, but you're just
+[00:23:48.520 --> 00:23:51.520]   going to run it locally and then upload it.
+[00:23:51.520 --> 00:23:56.520]   But anyways, we were really cool if I could just upload this up, and get it on back, but
+[00:23:56.520 --> 00:23:59.520]   I don't know if you can all of that functionality.
+[00:23:59.520 --> 00:24:02.520]   I have a way of topic.
+[00:24:02.520 --> 00:24:04.520]   What was I saying?
+[00:24:04.520 --> 00:24:05.520]   Oh yeah, the knob script.
+[00:24:05.520 --> 00:24:11.520]   So I had it through stage compilation, so I wrote my compile script, and then I also wrote
+[00:24:11.520 --> 00:24:20.520]   the config.h file, which, no, I expected it, and I generated the config.h file if it didn't
+[00:24:20.520 --> 00:24:21.520]   exist.
+[00:24:21.520 --> 00:24:26.520]   If it did exist, I'd use the one that's already there.
+[00:24:26.520 --> 00:24:32.520]   And then there I have like a hash-defined debug, which I can uncomment that for releaseable,
+[00:24:32.520 --> 00:24:38.520]   a command that for debugable, and a hash-defined window, I think something like that, where
+[00:24:38.520 --> 00:24:43.520]   if I define windows, I compile for windows, otherwise I compile for Linux, I do all my
+[00:24:43.520 --> 00:24:44.520]   development work on Linux.
+[00:24:44.520 --> 00:24:48.520]   I only have a Linux computer, I don't call it a Linux, a Windows computer.
+[00:24:48.520 --> 00:24:51.520]   All of my time, okay, my brother is at the moment.
+[00:24:51.520 --> 00:24:52.520]   Is he using Windows?
+[00:24:52.520 --> 00:24:54.520]   I don't know if my brother is using Windows.
+[00:24:54.520 --> 00:24:58.520]   My parents only used Windows.
+[00:24:58.520 --> 00:25:02.520]   My brother was only using Windows, then he was using Linux.
+[00:25:02.520 --> 00:25:04.520]   He might be using Windows again.
+[00:25:04.520 --> 00:25:06.520]   I don't know.
+[00:25:06.520 --> 00:25:08.520]   My friend also was using Linux.
+[00:25:08.520 --> 00:25:11.520]   Couldn't have tried this, but I can't switch back to Windows.
+[00:25:11.520 --> 00:25:12.520]   But yeah.
+[00:25:12.520 --> 00:25:16.520]   Anyway, I only have Linux.
+[00:25:16.520 --> 00:25:20.520]   There are lab computers available with Windows 11.
+[00:25:20.520 --> 00:25:24.520]   What's an awful lot?
+[00:25:24.520 --> 00:25:28.520]   With Windows 11, I'm not doing all my development work on those.
+[00:25:28.520 --> 00:25:30.520]   Thank you very much.
+[00:25:30.520 --> 00:25:34.520]   I'd like to make Linux.
+[00:25:34.520 --> 00:25:36.520]   It's a great development environment.
+[00:25:36.520 --> 00:25:40.520]   As a general operating system, I already don't like Windows.
+[00:25:40.520 --> 00:25:44.520]   I don't think it makes a great development environment either.
+[00:25:44.520 --> 00:25:48.520]   I did all my development on the next cross-compiled for Windows.
+[00:25:48.520 --> 00:25:53.520]   I have a hash to find Windows.
+[00:25:53.520 --> 00:25:58.520]   For example, it might not be exactly Windows, but you get the gist of it.
+[00:25:58.520 --> 00:26:03.520]   Then my bold script would bold and run my secondary bold script.
+[00:26:03.520 --> 00:26:06.520]   It would then bold and run my actual thing.
+[00:26:06.520 --> 00:26:08.520]   I had like three layers of C.
+[00:26:08.520 --> 00:26:10.520]   I had my name for bold script.
+[00:26:10.520 --> 00:26:12.520]   I had my bold script.
+[00:26:12.520 --> 00:26:16.520]   Okay, well, it's not C. It's C++, but then I had my name.
+[00:26:16.520 --> 00:26:18.520]   Yes.
+[00:26:18.520 --> 00:26:22.520]   So that's essentially three levels of C/C++.
+[00:26:22.520 --> 00:26:29.520]   The game was like a mix of C and C++, because the library I'm using real of is a C library.
+[00:26:29.520 --> 00:26:30.520]   But yeah.
+[00:26:30.520 --> 00:26:34.520]   So, inspired by that, and this wasn't my idea.
+[00:26:34.520 --> 00:26:38.520]   It's actually an example within the knob repo.
+[00:26:38.520 --> 00:26:41.520]   They have like an example of how to do this.
+[00:26:41.520 --> 00:26:51.520]   So, the thing here, if there's no other event, I know C, I'm comfortable with C.
+[00:26:51.520 --> 00:26:56.520]   I've had a lot of fun racing in C and inspired by sorting.
+[00:26:56.520 --> 00:27:04.520]   So, the thing is I learned C++ for embedded programming in December 2020.
+[00:27:04.520 --> 00:27:12.520]   And then C, I never took like tutorials. I basically watched sorting.
+[00:27:12.520 --> 00:27:13.520]   That's what I did.
+[00:27:13.520 --> 00:27:16.520]   And I was like, that looks fun.
+[00:27:16.520 --> 00:27:24.520]   And at some point, I started programming C. I basically was already not using C++.
+[00:27:24.520 --> 00:27:28.520]   They're basically already writing procedural code.
+[00:27:28.520 --> 00:27:34.520]   Then all it is change up the headers of that and stop using I/O screens, use print F.
+[00:27:34.520 --> 00:27:39.520]   And today you have C. Now, it's going to be an awful C, but it's a C.
+[00:27:39.520 --> 00:27:44.520]   So, it's not very difficult searching over from C++ to C.
+[00:27:44.520 --> 00:27:50.520]   At least, if you have my experience at C++, but if you're doing like heavy C++ speeches,
+[00:27:50.520 --> 00:27:52.520]   there is probably a bit more difficult.
+[00:27:52.520 --> 00:27:55.520]   But then it's basically like the standard library is smaller.
+[00:27:55.520 --> 00:27:59.520]   You don't have vectors, for example, for things.
+[00:27:59.520 --> 00:28:03.520]   You don't have templates, which does suck occasionally.
+[00:28:03.520 --> 00:28:08.520]   Like really the lack of meta programming does sometimes.
+[00:28:08.520 --> 00:28:11.520]   That actually makes the experience a bit more painful.
+[00:28:11.520 --> 00:28:18.520]   But it does also like force it to do stuff in a more simple way.
+[00:28:18.520 --> 00:28:24.520]   And yeah, but I had sort of as an example and mostly subconscious, I reckon,
+[00:28:24.520 --> 00:28:29.520]   was basically emulating his style of program in C.
+[00:28:29.520 --> 00:28:34.520]   And I think I really learned how to keep stuff simple and constrained to scope.
+[00:28:34.520 --> 00:28:38.520]   And for example, I've also learned how to stick long-term with the projects.
+[00:28:38.520 --> 00:28:42.520]   Like some of the most long-term projects, most successful projects I've heard,
+[00:28:42.520 --> 00:28:47.520]   I actually started last year writing the middle of mathematics.
+[00:28:47.520 --> 00:28:52.520]   Like I said, I'm distractible.
+[00:28:52.520 --> 00:28:55.520]   Yeah, yeah, right in the middle of math again, I started.
+[00:28:55.520 --> 00:29:00.520]   So I've got multiple ones, and I've actually got a lot of them on high ages.
+[00:29:00.520 --> 00:29:06.520]   I've still done the two programs, but I have my run-time library.
+[00:29:06.520 --> 00:29:08.520]   I still haven't given up on that.
+[00:29:08.520 --> 00:29:10.520]   I need to finish a last few stuff.
+[00:29:10.520 --> 00:29:13.520]   Then I'm switching over to C99.
+[00:29:13.520 --> 00:29:17.520]   Because C89 is like a bridge to bare bones.
+[00:29:17.520 --> 00:29:22.520]   Honestly, I need variadic macros.
+[00:29:22.520 --> 00:29:23.520]   That's it.
+[00:29:23.520 --> 00:29:28.520]   If C89 had variadic macros, I'd probably be happy.
+[00:29:28.520 --> 00:29:32.520]   I need my variadic macros, variadic macros.
+[00:29:32.520 --> 00:29:37.520]   Variadic functions, don't really need those.
+[00:29:37.520 --> 00:29:42.520]   It's just the macros, the macros I need.
+[00:29:42.520 --> 00:29:46.520]   And then what else was it?
+[00:29:46.520 --> 00:29:50.520]   There's that one, there's my game, which I'd semi-abandoned,
+[00:29:50.520 --> 00:29:53.520]   but there's still stuff I wanted to do with it.
+[00:29:53.520 --> 00:30:03.520]   There's my kernel, my first success in the directional kernel programming.
+[00:30:03.520 --> 00:30:05.520]   Never got very funny.
+[00:30:05.520 --> 00:30:09.520]   Before, to be said, in this case, I said forget about the boot,
+[00:30:09.520 --> 00:30:11.520]   though, they're just right to kernel.
+[00:30:11.520 --> 00:30:13.520]   In fact, I'm not using grub or anything.
+[00:30:13.520 --> 00:30:15.520]   I'm literally the same chemo.
+[00:30:15.520 --> 00:30:16.520]   This is a kernel.
+[00:30:16.520 --> 00:30:17.520]   It says a kernel.
+[00:30:17.520 --> 00:30:21.520]   And previously, I tried going from boot load as everything.
+[00:30:21.520 --> 00:30:24.520]   It's very difficult.
+[00:30:24.520 --> 00:30:28.520]   But yeah, I've got that one.
+[00:30:28.520 --> 00:30:32.520]   I haven't worked on it in a month or two, but that one is,
+[00:30:32.520 --> 00:30:35.520]   there are a few stuff I wanted, and I tied to an optimization,
+[00:30:35.520 --> 00:30:37.520]   and then that one's done.
+[00:30:37.520 --> 00:30:44.520]   There's some private projects which I'm doing for people I know.
+[00:30:44.520 --> 00:30:48.520]   I need to spend more time on those.
+[00:30:48.520 --> 00:30:51.520]   There are, what else?
+[00:30:51.520 --> 00:30:55.520]   There's that less spiral recently on my phone.
+[00:30:55.520 --> 00:30:59.520]   I uploaded it like a day or two ago to get up.
+[00:30:59.520 --> 00:31:01.520]   Very proud of that one.
+[00:31:01.520 --> 00:31:04.520]   It's like an actually a pleasant little language.
+[00:31:04.520 --> 00:31:09.520]   Currently, I'm working on, like, to demonstrate the power of less,
+[00:31:09.520 --> 00:31:16.520]   working on a procedural dialect, but I'm not writing a compiler for
+[00:31:16.520 --> 00:31:17.520]   different language.
+[00:31:17.520 --> 00:31:23.520]   I am just using LISP itself, like the functionality within LISP,
+[00:31:23.520 --> 00:31:26.520]   to just like the fine macros.
+[00:31:26.520 --> 00:31:30.520]   And now you have a procedural dialect.
+[00:31:30.520 --> 00:31:38.520]   And I'm also working on making it boot scrapable.
+[00:31:38.520 --> 00:31:41.520]   So yeah, I'm having fun with that.
+[00:31:41.520 --> 00:31:43.520]   I think I have another one or two.
+[00:31:43.520 --> 00:31:46.520]   I can't remember all the projects I'm working on.
+[00:31:46.520 --> 00:31:49.520]   But, like, lots of these I've been working on months.
+[00:31:49.520 --> 00:31:52.520]   The less one, only for two weeks.
+[00:31:52.520 --> 00:31:56.520]   Probably, I'm going to finish the part procedural dialect.
+[00:31:56.520 --> 00:32:01.520]   Maybe visit it back for a Java dialect and then, like, not touch it further.
+[00:32:01.520 --> 00:32:06.520]   Use it as an base or some other list, because I could make it less of this really fun.
+[00:32:06.520 --> 00:32:09.520]   I might try to make a statically typed list.
+[00:32:09.520 --> 00:32:15.520]   I might want to try making a compiler list.
+[00:32:15.520 --> 00:32:21.520]   And then try to go back into more syntactically complex languages,
+[00:32:21.520 --> 00:32:24.520]   with so far I've had very little success with.
+[00:32:24.520 --> 00:32:27.520]   I might also try adding it to the operating system.
+[00:32:27.520 --> 00:32:32.520]   And while doing so, also optimize the amount of aggregations it's doing,
+[00:32:32.520 --> 00:32:34.520]   because it's really doing a lot of barricades.
+[00:32:34.520 --> 00:32:43.520]   But then I think that I'd rather make a C++ implementation of a list based on that list.
+[00:32:43.520 --> 00:32:46.520]   Rather than that list, it's out with the same semantics.
+[00:32:46.520 --> 00:32:48.520]   But I'm getting very off topic.
+[00:32:48.520 --> 00:32:51.520]   I probably spent the last 10 minutes on topic.
+[00:32:51.520 --> 00:32:54.520]   I really need to listen back to this as I could.
+[00:32:54.520 --> 00:32:57.520]   Actually, I'm going to search for the next dictation software.
+[00:32:57.520 --> 00:33:00.520]   And I'm going to dictate this into a text file.
+[00:33:00.520 --> 00:33:03.520]   And I'm just going to either edit that or type it over.
+[00:33:03.520 --> 00:33:07.520]   But I'm not listening to myself right over for 40 minutes.
+[00:33:07.520 --> 00:33:14.520]   Like, dude, I'm going to get so bored, even if I'm listening at 2 times speed.
+[00:33:14.520 --> 00:33:17.520]   Anyways, where was I?
+[00:33:17.520 --> 00:33:23.520]   So yes, inspired by Todings' guide video, I don't think it was screened.
+[00:33:23.520 --> 00:33:25.520]   I think it was just a video.
+[00:33:25.520 --> 00:33:30.520]   And inspired by the two-stage bold process, I was like,
+[00:33:30.520 --> 00:33:33.520]   "Well, why don't I do basically the same in C?
+[00:33:33.520 --> 00:33:36.520]   I'm comfortable with C. I know how to use C.
+[00:33:36.520 --> 00:33:38.520]   C is a nice and simple language.
+[00:33:38.520 --> 00:33:40.520]   Not an easy language, a simple language.
+[00:33:40.520 --> 00:33:42.520]   There's a difference.
+[00:33:42.520 --> 00:33:47.520]   The less I wrote in C, for example, also a very simple language.
+[00:33:47.520 --> 00:33:51.520]   Don't know if it's more, it's in text, it's more simple than C.
+[00:33:51.520 --> 00:33:53.520]   Also very simple language.
+[00:33:53.520 --> 00:33:58.520]   You have to think a bit weirdly to understand it.
+[00:33:58.520 --> 00:34:01.520]   It's a bit of a odd paradigm.
+[00:34:01.520 --> 00:34:05.520]   I'm sure the less the zingerons get very mad at me.
+[00:34:05.520 --> 00:34:08.520]   Don't worry, it's finding odd, aren't odd.
+[00:34:08.520 --> 00:34:11.520]   Don't worry about it.
+[00:34:11.520 --> 00:34:14.520]   But what's it?
+[00:34:14.520 --> 00:34:16.520]   Yeah, so like C, very simple, right?
+[00:34:16.520 --> 00:34:19.520]   It's basically a line of C.
+[00:34:19.520 --> 00:34:23.520]   Like once you forget about the macros, right, expand all your macros.
+[00:34:23.520 --> 00:34:28.520]   A line of C basically corresponds to several lines of assembly.
+[00:34:28.520 --> 00:34:33.520]   You can make pretty simple substitution rules in theory at least.
+[00:34:33.520 --> 00:34:38.520]   Now, of course, modern compilers are a lot more clearer than that.
+[00:34:38.520 --> 00:34:43.520]   But in theory, a line of C is just like a few assembly instructions.
+[00:34:43.520 --> 00:34:48.520]   In the same order that we write to C code, you can just write your assembly code
+[00:34:48.520 --> 00:34:51.520]   and there you have your program.
+[00:34:51.520 --> 00:34:55.520]   In that sense, C is an incredibly simple language.
+[00:34:55.520 --> 00:34:59.520]   That also means you have to do half the stuff yourself,
+[00:34:59.520 --> 00:35:04.520]   which in a language like C++ or Go or Jai or Rast,
+[00:35:04.520 --> 00:35:09.520]   the compiler would do a lot of the work you now have to do yourself.
+[00:35:09.520 --> 00:35:13.520]   But yeah, so simple language I actually like.
+[00:35:13.520 --> 00:35:17.520]   It's a lot for, but it recreational programming.
+[00:35:17.520 --> 00:35:19.520]   C is great for that.
+[00:35:19.520 --> 00:35:25.520]   I wouldn't want to actually maintain all the serious programming C
+[00:35:25.520 --> 00:35:28.520]   that sounds painful, but for recreational stuff.
+[00:35:28.520 --> 00:35:30.520]   It's really a fun language.
+[00:35:30.520 --> 00:35:36.520]   There's Dan.
+[00:35:36.520 --> 00:35:38.520]   Yeah, and I know it, I understand it.
+[00:35:38.520 --> 00:35:40.520]   I feel like this is the first time I've saved that.
+[00:35:40.520 --> 00:35:45.520]   Maybe I'll make that, but whatever.
+[00:35:45.520 --> 00:35:48.520]   So why don't I do the same thing that he did with his Jai?
+[00:35:48.520 --> 00:35:49.520]   I know I can do it.
+[00:35:49.520 --> 00:35:53.520]   I've done it with Nob before, but my two-stage bold code,
+[00:35:53.520 --> 00:35:57.520]   say, singing.
+[00:35:57.520 --> 00:36:01.520]   And I just wrote, I use Nob.8.
+[00:36:01.520 --> 00:36:04.520]   I have C files in, well, I don't have C files.
+[00:36:04.520 --> 00:36:06.520]   I have templates files in a directory.
+[00:36:06.520 --> 00:36:09.520]   I assemble those templates files into C files,
+[00:36:09.520 --> 00:36:13.520]   and then I compile and run the C programs.
+[00:36:13.520 --> 00:36:17.520]   And the output of the C program is the content of memory page.
+[00:36:17.520 --> 00:36:19.520]   It's very straightforward.
+[00:36:19.520 --> 00:36:22.520]   The execution was also honestly straightforward.
+[00:36:22.520 --> 00:36:28.520]   And the great thing is, I have like five or six different constructs
+[00:36:28.520 --> 00:36:30.520]   in my templating language.
+[00:36:30.520 --> 00:36:34.520]   And that's all I need, because if I need more content stuff,
+[00:36:34.520 --> 00:36:37.520]   I can just write C code.
+[00:36:37.520 --> 00:36:39.520]   And I can write C code.
+[00:36:39.520 --> 00:36:41.520]   I know how to write C code.
+[00:36:41.520 --> 00:36:44.520]   But previously, if I want to do my own templating,
+[00:36:44.520 --> 00:36:48.520]   it's like for everything you want to do with the templating language,
+[00:36:48.520 --> 00:36:51.520]   you have to add a new form of template.
+[00:36:51.520 --> 00:36:54.520]   But this, I'm just generating C code,
+[00:36:54.520 --> 00:36:59.520]   and I understand how the C code is generated.
+[00:36:59.520 --> 00:37:09.520]   So if I want to use, let's say I'm using the IPA in a blog post.
+[00:37:09.520 --> 00:37:12.520]   And I don't want to go back and forth to Wikipedia,
+[00:37:12.520 --> 00:37:17.520]   I'm pasting symbols from the IPA chart, like I usually do.
+[00:37:17.520 --> 00:37:22.520]   And I just want to say, at the top of my program,
+[00:37:22.520 --> 00:37:27.520]   to let Flaw equals Flaw.
+[00:37:27.520 --> 00:37:34.520]   And then I can just type out HWA everywhere in my file
+[00:37:34.520 --> 00:37:38.520]   and have that auto substitute for the Flaw symbol.
+[00:37:38.520 --> 00:37:40.520]   Now, I wouldn't do this in practice,
+[00:37:40.520 --> 00:37:43.520]   because I can just type with it.
+[00:37:43.520 --> 00:37:46.520]   Print screen EE, I believe.
+[00:37:46.520 --> 00:37:51.520]   I believe print screen is my, what do you call it?
+[00:37:51.520 --> 00:37:52.520]   Combination, yes.
+[00:37:52.520 --> 00:37:55.520]   It's not combination, but like what's ever composed.
+[00:37:55.520 --> 00:37:57.520]   I believe print screen is my composed key.
+[00:37:57.520 --> 00:37:59.520]   I'm not sure, though.
+[00:37:59.520 --> 00:38:01.520]   Sure, let's print screen.
+[00:38:01.520 --> 00:38:04.520]   I think this might be like score lock or something.
+[00:38:04.520 --> 00:38:06.520]   It sets on the right of my keyboard, right bottom.
+[00:38:06.520 --> 00:38:07.520]   That's all I know.
+[00:38:07.520 --> 00:38:09.520]   I've got my full memory.
+[00:38:09.520 --> 00:38:13.520]   So just my compose EE that writes Flaw.
+[00:38:13.520 --> 00:38:17.520]   But like, if I want the, I don't know what the thing is called.
+[00:38:17.520 --> 00:38:19.520]   But like if I want the symbol for a year,
+[00:38:19.520 --> 00:38:23.520]   like if I want a year symbol, or the symbol for that year.
+[00:38:23.520 --> 00:38:27.520]   Or the rr symbol, not rr, rr, rr.
+[00:38:27.520 --> 00:38:33.520]   If I want that symbol, you know, I can't type that on my keyboard.
+[00:38:33.520 --> 00:38:37.520]   So if I want to say, just like, let English R
+[00:38:37.520 --> 00:38:43.520]   be substituted for the rr symbol in C,
+[00:38:43.520 --> 00:38:47.520]   I can just like, either the, I can just define a variable
+[00:38:47.520 --> 00:38:53.520]   and then have the, and then use the print the C expression template.
+[00:38:53.520 --> 00:38:58.520]   Or I can define a function which prints it to standard output,
+[00:38:58.520 --> 00:39:00.520]   which that's actually a bit stupid to do it that way.
+[00:39:00.520 --> 00:39:02.520]   But I can do that.
+[00:39:02.520 --> 00:39:08.520]   And then do the, run the C code template, right?
+[00:39:08.520 --> 00:39:10.520]   I can do that.
+[00:39:10.520 --> 00:39:14.520]   You know, it's like, I can just do that, right?
+[00:39:14.520 --> 00:39:20.520]   If I was writing like my own whole templating language and stuff,
+[00:39:20.520 --> 00:39:25.520]   I'd have to make a new substitution template, you know?
+[00:39:25.520 --> 00:39:28.520]   Yeah.
+[00:39:28.520 --> 00:39:33.520]   And so because of like this bolt-in, like capabilities,
+[00:39:33.520 --> 00:39:38.520]   in fact, that my log-generating templating language
+[00:39:38.520 --> 00:39:42.520]   was actually, is Turing complete.
+[00:39:42.520 --> 00:39:46.520]   I get that basically for free, but sometimes I'm familiar with it.
+[00:39:46.520 --> 00:39:50.520]   Like the templating syntax are obviously used to live
+[00:39:50.520 --> 00:39:55.520]   by the programs that actually do so in the Turing completeness
+[00:39:55.520 --> 00:39:59.520]   that I get for free, because I already know how to write, see?
+[00:39:59.520 --> 00:40:03.520]   All of that, I get basically for free,
+[00:40:03.520 --> 00:40:09.520]   with an actually incredibly simple program.
+[00:40:09.520 --> 00:40:12.520]   All I do is I do some pattern matching.
+[00:40:12.520 --> 00:40:17.520]   I, and then around my captured patterns essentially.
+[00:40:17.520 --> 00:40:19.520]   Like, this isn't the exact word handled in code,
+[00:40:19.520 --> 00:40:22.520]   but like, this is conceptually what I'm doing.
+[00:40:22.520 --> 00:40:25.520]   So I just do some pattern matching, right?
+[00:40:25.520 --> 00:40:30.520]   Like this sort of a bracket, and then within the matched pattern,
+[00:40:30.520 --> 00:40:34.520]   I just take the text which is matched within the pattern,
+[00:40:34.520 --> 00:40:40.520]   and I put some text around it, and I write it to a file,
+[00:40:40.520 --> 00:40:46.520]   and then I call an external program, and I have my page.
+[00:40:46.520 --> 00:40:50.520]   Simple as that.
+[00:40:50.520 --> 00:40:58.520]   So yeah, I think like the moral of the story is
+[00:40:58.520 --> 00:41:01.520]   keep it simple stupid,
+[00:41:01.520 --> 00:41:06.520]   or stop being perfectionistic and reinventing the wheel
+[00:41:06.520 --> 00:41:09.520]   and just use something somebody else wrote.
+[00:41:09.520 --> 00:41:14.520]   Basically, pick between those two, and you can have a website.
+[00:41:14.520 --> 00:41:19.520]   Also, there's don't be like me, I'm just like weird.
+[00:41:19.520 --> 00:41:21.520]   I'll link these websites.
+[00:41:21.520 --> 00:41:23.520]   I should actually write the blog post,
+[00:41:23.520 --> 00:41:25.520]   and then awesome if I can link this website,
+[00:41:25.520 --> 00:41:28.520]   but like one of my classmates is working on an awesome website.
+[00:41:28.520 --> 00:41:29.520]   It looks great.
+[00:41:29.520 --> 00:41:32.520]   It's using like, I'm pretty sure it's using React,
+[00:41:32.520 --> 00:41:35.520]   and I think there's all sorts of like, I don't know,
+[00:41:35.520 --> 00:41:37.520]   JavaScript components and stuff, but like,
+[00:41:37.520 --> 00:41:41.520]   it looks like a desktop right.
+[00:41:41.520 --> 00:41:44.520]   It's like a computer desktop, and like, you know,
+[00:41:44.520 --> 00:41:47.520]   you can open the one window, and there's like cool particle systems
+[00:41:47.520 --> 00:41:50.520]   and trails that follow your mouse.
+[00:41:50.520 --> 00:41:53.520]   Yeah, he's going more of a like cake demo show of the programming
+[00:41:53.520 --> 00:41:59.520]   I can do, like I can do web dev, or I am learning to do web dev,
+[00:41:59.520 --> 00:42:03.520]   rather than I just want something which displays text,
+[00:42:03.520 --> 00:42:06.520]   which like both websites are cool.
+[00:42:06.520 --> 00:42:11.520]   I'm going more in the Gemini philosophy, you know,
+[00:42:11.520 --> 00:42:17.520]   the alternative to the internet Gemini protocol.
+[00:42:17.520 --> 00:42:19.520]   And like the cool thing about the way I'm doing stuff,
+[00:42:19.520 --> 00:42:22.520]   there's nothing about what I'm doing which makes it inherently
+[00:42:22.520 --> 00:42:25.520]   that I need to write HTML.
+[00:42:25.520 --> 00:42:29.520]   So like, I could also generate a Gemini capsule
+[00:42:29.520 --> 00:42:35.520]   using the same static site generator, which is like really awesome.
+[00:42:35.520 --> 00:42:39.520]   Yeah, I might set up a Gemini capsule at some point,
+[00:42:39.520 --> 00:42:43.520]   and it might mirror lots of the content.
+[00:42:43.520 --> 00:42:48.520]   It might be easier to just like have separate contents
+[00:42:48.520 --> 00:42:53.520]   on the Gemini capsule, but I could also like write some sort of
+[00:42:53.520 --> 00:42:58.520]   this white gen text and write a gen text to HTML converter.
+[00:42:58.520 --> 00:43:03.520]   Like maybe some sort of an expanded gen text,
+[00:43:03.520 --> 00:43:07.520]   whereas you can take it as is, and then it's valid gen text,
+[00:43:07.520 --> 00:43:09.520]   and it works.
+[00:43:09.520 --> 00:43:12.520]   But then also like if I put stars around the word,
+[00:43:12.520 --> 00:43:15.520]   it's will bold it in HTML or whatever,
+[00:43:15.520 --> 00:43:22.520]   so that the conversion to HTML isn't a strict gen text interpreter.
+[00:43:22.520 --> 00:43:24.520]   You know, some people which that would angry greatly,
+[00:43:24.520 --> 00:43:27.520]   but I don't care, I'm doing my own thing.
+[00:43:27.520 --> 00:43:30.520]   And I think specifically of what is your name?
+[00:43:30.520 --> 00:43:33.520]   Drude of Alt, yeah.
+[00:43:33.520 --> 00:43:39.520]   I think was it Lagrange or was it another Gemini browser?
+[00:43:39.520 --> 00:43:43.520]   They had this cool thing about like a favicon emoji,
+[00:43:43.520 --> 00:43:48.520]   so you'd have like a favicon.txt at your site food,
+[00:43:48.520 --> 00:43:52.520]   and that would contain a single emoji.
+[00:43:52.520 --> 00:43:56.520]   And then if you find the favicon.txt,
+[00:43:56.520 --> 00:44:01.520]   it would like to say that as your capsules favicon,
+[00:44:01.520 --> 00:44:07.520]   like the same as you've got your little picture in the websites,
+[00:44:07.520 --> 00:44:09.520]   right, YouTube's got the play button.
+[00:44:09.520 --> 00:44:13.520]   I've also got my own thing I'm pretty sure I can't remember.
+[00:44:13.520 --> 00:44:15.520]   I might not.
+[00:44:15.520 --> 00:44:18.520]   Google has the G, that goal has the little back.
+[00:44:18.520 --> 00:44:20.520]   Facebook presumably has an F.
+[00:44:20.520 --> 00:44:23.520]   I don't really use Facebook.
+[00:44:23.520 --> 00:44:26.520]   Sometimes I watch church services on Facebook,
+[00:44:26.520 --> 00:44:29.520]   but that's just my family.
+[00:44:29.520 --> 00:44:34.520]   That's only if we as a family for some reason can't make it to church.
+[00:44:34.520 --> 00:44:39.520]   Yeah, when I'm on my own, I normally can just walk to church,
+[00:44:39.520 --> 00:44:42.520]   but whatever.
+[00:44:42.520 --> 00:44:46.520]   Yeah, so they did that cool favicon emoji.
+[00:44:46.520 --> 00:44:49.520]   And by the way, I'm with my first drop now.
+[00:44:49.520 --> 00:44:52.520]   I'm just rambling to myself.
+[00:44:52.520 --> 00:44:57.520]   Yeah, let's see.
+[00:44:57.520 --> 00:45:00.520]   It's like a really cool idea.
+[00:45:00.520 --> 00:45:05.520]   If you don't like it, we'll put it in a black list of sites.
+[00:45:05.520 --> 00:45:07.520]   They were really cool about it.
+[00:45:07.520 --> 00:45:09.520]   I respect the robots for text or something.
+[00:45:09.520 --> 00:45:12.520]   I don't know if Gemini has a robot.txt.
+[00:45:12.520 --> 00:45:18.520]   But anyways, you see, they're just like same group of all three.
+[00:45:18.520 --> 00:45:23.520]   It was like no, but everything must be a single request.
+[00:45:23.520 --> 00:45:27.520]   And you are like ruining this.
+[00:45:27.520 --> 00:45:30.520]   And next thing, we're going to have HTML and tractors.
+[00:45:30.520 --> 00:45:35.520]   And once again, if anyone queries this file on my capsule,
+[00:45:35.520 --> 00:45:39.520]   I am going to block their IP and I don't know what else.
+[00:45:39.520 --> 00:45:41.520]   I am talking off the top of my head, right?
+[00:45:41.520 --> 00:45:44.520]   This isn't probably not exactly what he said.
+[00:45:44.520 --> 00:45:48.520]   It's like, see, I understand these concerns.
+[00:45:48.520 --> 00:45:50.520]   100% there.
+[00:45:50.520 --> 00:45:52.520]   But just the way he handled it.
+[00:45:52.520 --> 00:45:54.520]   He went a bit overboard.
+[00:45:54.520 --> 00:45:56.520]   It's all unseen.
+[00:45:56.520 --> 00:46:00.520]   I think generally it's interesting.
+[00:46:00.520 --> 00:46:05.520]   People who are good at programming typically, they're weird.
+[00:46:05.520 --> 00:46:08.520]   It's the easiest way to say it.
+[00:46:08.520 --> 00:46:12.520]   You have to have some sort of an e-typical, a weird mind.
+[00:46:12.520 --> 00:46:16.520]   You have to think in strange ways.
+[00:46:16.520 --> 00:46:18.520]   And you're probably quite intelligent.
+[00:46:18.520 --> 00:46:22.520]   And that typically comes like that combination of stuff.
+[00:46:22.520 --> 00:46:27.520]   Typically comes with, you probably not the most socially well-adjusted individual.
+[00:46:27.520 --> 00:46:31.520]   And I am also talking about myself.
+[00:46:31.520 --> 00:46:37.520]   I hope at least I have politeness and clear communications down.
+[00:46:37.520 --> 00:46:39.520]   But I definitely am not the best.
+[00:46:39.520 --> 00:46:45.520]   So the most well-socially adjusted individual either.
+[00:46:45.520 --> 00:46:49.520]   So it's like Linus Torvald.
+[00:46:49.520 --> 00:46:51.520]   But I think he's mellowed out recently.
+[00:46:51.520 --> 00:46:57.520]   But he's also known for being very rude and outspoken.
+[00:46:57.520 --> 00:47:02.520]   Yeah.
+[00:47:02.520 --> 00:47:06.520]   But what's it?
+[00:47:06.520 --> 00:47:07.520]   Yeah.
+[00:47:07.520 --> 00:47:11.520]   So I imagine if I don't know, I'm writing an extended gen text.
+[00:47:11.520 --> 00:47:14.520]   And so it's not just looking at the first three characters.
+[00:47:14.520 --> 00:47:18.520]   I can look at the first three characters, and it's from further gen text.
+[00:47:18.520 --> 00:47:20.520]   Like you can do that, no problem.
+[00:47:20.520 --> 00:47:25.520]   But also I am interpreting stuff in the middle for HTML.
+[00:47:25.520 --> 00:47:30.520]   And I'm not just using it for like layout of content.
+[00:47:30.520 --> 00:47:32.520]   Or I can't remember exactly.
+[00:47:32.520 --> 00:47:34.520]   I'm also like doing other stuff with it.
+[00:47:34.520 --> 00:47:36.520]   I'm sure he'd be...
+[00:47:36.520 --> 00:47:39.520]   Well, I don't know if he really cares about it anymore.
+[00:47:39.520 --> 00:47:44.520]   And hopefully he's improved since then.
+[00:47:44.520 --> 00:47:51.520]   But I imagine others who are passionate about the whole jimini thing.
+[00:47:51.520 --> 00:48:00.520]   Gemini, however you pronounce it, might also be very upset at my first thing of it.
+[00:48:00.520 --> 00:48:01.520]   It's a cool technology.
+[00:48:01.520 --> 00:48:02.520]   It's a cool protocol.
+[00:48:02.520 --> 00:48:05.520]   It's a cool technology.
+[00:48:05.520 --> 00:48:13.520]   So I am just messing around and doing stuff that I find fun.
+[00:48:13.520 --> 00:48:18.520]   And I am going to do my best to be polite.
+[00:48:18.520 --> 00:48:21.520]   As I do it, when I interact with other people.
+[00:48:21.520 --> 00:48:25.520]   But I am over here doing my own thing and having fun.
+[00:48:25.520 --> 00:48:30.520]   If I don't conform to your strict sense of purity, I don't really care.
+[00:48:30.520 --> 00:48:33.520]   I'll be honest.
+[00:48:33.520 --> 00:48:37.520]   And 50 minutes recording in this one.
+[00:48:37.520 --> 00:48:41.520]   That's why I'm going to use dictations after I'm not listening back to this.
+[00:48:41.520 --> 00:48:42.520]   Yep.
+
+whisper_print_timings:     load time =   187.80 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =  7889.60 ms
+whisper_print_timings:   sample time = 85183.54 ms / 50013 runs (     1.70 ms per run)
+whisper_print_timings:   encode time = 444357.06 ms /   110 runs (  4039.61 ms per run)
+whisper_print_timings:   decode time =  2185.71 ms /   175 runs (    12.49 ms per run)
+whisper_print_timings:   batchd time = 362942.75 ms / 49289 runs (     7.36 ms per run)
+whisper_print_timings:   prompt time = 115016.73 ms / 24297 runs (     4.73 ms per run)
+whisper_print_timings:    total time = 1020950.06 ms

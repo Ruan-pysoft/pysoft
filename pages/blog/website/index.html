@@ -1,0 +1,78 @@
+${blog_article_begin("website");}$
+
+<p>Finally, after <em>checks notes</em> <a href="https://web.archive.org/web/20211221172319/http://pysoft.co.za/">four or five years</a> of having a placeholder homepage on my domain, and probably even more of owning it, I actually have a website.</p>
+
+<p>So, how did I finally do it, or rather, how did I not do it earlier, and what changed?</p>
+
+<p>Now, when it comes to the internet I generally dislike a bunch of JavaScript and hundreds of megabytes of images when it is not necessary.${fn();}$ If you're serving me text with some formatting, just give me some static HTML and CSS and be done with it!${fn();}$</p>
+${fn_text(}$$"one place a bunch of JavaScript isn't unnecessary, is cool demo websites like <a href="https://someonw-dev.com">this one</a> made by one of my classmates"$${);}$
+${fn_text(}$$"I get especially annoyed when I'm on the road or in the mountains so don't have good internet access, and I can't access a basically-text-only webpage because fetching the content keeps timing out or being interrupted by drops in internet"$${);}$
+
+<p>Because of this, I've always wanted my website to be a simple affair, just some static pieces of HTML with some CSS to spice things up, and not a speck of JavaScript in sight. Okay, I might want a demo here or an applet there, but in my general, everyday pages there shouldn't be any JavaScript.</p>
+
+<p>This means that I'm not interested in making a site with something like React, and definitely not Wordpress either.</p>
+
+<h2>Lost in the desert</h2>
+
+<p>So, no big deal, you might say. Plenty of ways to get that done. And indeed, you would be right; That is, were I not so picky.</p>
+
+<p>One option you might propose it to just write HTML by hand – plenty of people have done it${fn();}$. The problem in this approach, lies in the fact that HTML does not come with any sort of built-in templating. This means if I want some sort of a common element, a navbar or next/previous buttons for blog entries, for example, I don't have a nice way of doing that automatically with just HTML. I <em>could</em> enter the same thing in every single page, yes, but what if I want to add a link to the navbar? What if I want to change a piece of text? Now I need to update every. single. page. on the whole website. And I'm a programmer, we'll spend hours automating something that would take minutes to do manually${fn();}$; how much more would I want to optimise a repetitive task where I could easily miss a spot, which could eventually take hours${fn();}$ to do if my site grew large enough?</p>
+${fn_text(}$$"<a href="https://xkcd.com/1319">relevant xkcd</a>, and <a href="https://xkcd.com/974">another</a> <br> fun fact, I probably spent a few hours on displaying these footnotes last night, just to go back to boring inline footnotes, because being fancy without using JS was too much trouble"$${);}$
+${fn_text(}$$"for a selection of handwritten websites, you might be interested in https://neocities.org/, which hosts quite a few very impressive and creative websites"$${);}$
+${fn_text(}$$"okay, so maybe <em>hours</em> is a bit overoptimistic, I doubt my site will grow <em>that</em> large, but even if it took fifteen minutes that'd be quite annoying"$${);}$
+
+<p>That, and writing <code>&lt;!DOCTYPE html&gt; &lt;html&gt;&lt;head&gt; bunch of random nonsnes &lt;/head&gt;&lt;body&gt; actual content &lt;/body&gt;&lt;/html&gt;</code> each time gets really boring and really repetitive really fast. And I get bored easily.</p>
+
+<p>The easy solution in that case is to use some sort of a static site generator. I'm sure I could have just use some standard tool in a language I was familiar with, like Flask, but here is where some of my peculiarities come in.</p>
+
+<p>For one, I like being in control and doing things my way. If I'm going to write a blog post, I'm putting it where I want to put it, I don't want to be forced into a specific paradigm of how I should structure my website.</p>
+
+<p>And this also extends to the HTML: I don't want whatever I use to stuff in a bunch of random CSS files and meta tags in my header – I need to know what everything there does, and I need to be able to remove it if I don't like it.</p>
+
+<p>Then I also like reinventing the wheel, and I want to understand what I'm using completely. I don't want to write a python file and use random functions I found in the documentation or a tutorial somewhere, and roughly cobble something together. I mean, I <em>can</em> do that, I often <em>do</em> do that if I don't care about the exact mechanisms. But if I'm making <em>my</em> site, <em>I</em> want to know how it works!</p>
+
+<p>Another problem, is that I want to make a multilingual site. I'm fluent in two languages already, and hope to learn more as time goes on, and so I want to make my website available in multiple languages. And so whatever I use must support this, and support it well – I want to have my navbar translated when I write a page in a different language. I want the <code>lang</code> attribute of the outer <code>html</code> tag to correctly vary between <code>en-ZA</code>, <code>af</code>, and whatever else. And, once again, I don't want to be forced into <em>your</em> way of segregating the different languages, and <em>your</em> way of serving pages translated into different languages. I want to do it <em>my</em> way.</p>
+
+<p>Lastly, whatever I use must allow me to at some point start using MathJax or something similar; after all, I love mathematics, and am now studying Mathematics at university (along with CompSci of course), so I'd likely want to add math content to my website at some point.</p>
+
+<p>So what does this mean I need in a static site generator?</p>
+
+<ul>
+<li>I need complete control of the output locations for the files</li>
+<li>I need complete, or at least great, control of the generated HTML</li>
+<li>I need support for a multilingual site, including changing <code>lang</code> attributes and the like<ul>
+<li>once again, with complete control of the site layout</li>
+</ul>
+</li>
+<li>I need it to support some sort of way of writing maths that can render nicely</li>
+</ul>
+
+<p>And so, over the years, I tried various SSGs. And I'm sure there are plenty that do fit my requirements, but I just did not spend enough time on them, or encountered too much friction trying to do stuff <em>my</em> way rather than how the SSG wants me to do it.${fn();}$</p>
+${fn_text(}$$"I recall that I had quite a bit of success with a cool SSG, <a href="https://hastysite.h3rald.com/">hastysite</a>, which came with a cute little stack-based programming language, but had issues because the page language was <a href="https://github.com/h3rald/hastyscribe/blob/master/src/hastyscribe.nim#L463">hard-coded as English</a>, and at the time I couldn't work out a nice way of fixing that"$${);}$
+
+<p>And of course, through this time, I also tried various times to write my own SSGs, typically in Python. Sometimes I'd do the markup to html conversion manually, other times I'd use some library, and I'm sure at times I just wrote a program to stitch HTML fragments together. However most of these personal projects inevitably faced over-engineering, scope creep, and eventual abandonment once they were no longer maintainable or fun to work on.</p>
+
+<h2>The promised land at last</h2>
+
+<p>In the last few years, however, I've started programming in C recreationally, inspired in large part by <a href="https://youtube.com/@TsodingDaily">Tsoding</a>, where I started learning about minimalism and how to really just work on a program one feature at a time rather than overgeneralising for hypothetical future use-cases. Then last year, I started successfully working on <a href="https://github.com/Ruan-pysoft/ministdlib">various</a> <a href="https://github.com/Ruan-pysoft/cpp_demo_kernel">long-term</a> <a href="https://github.com/Ruan-pysoft/platformer">projects</a>, which would actually last months and reach usable states, rather than my old practice of writing a program for a week or two before abandoning it completely. Along with this, I worked on a few <a href="https://github.com/Ruan-pysoft/image_averaging">small</a> <a href="https://github.com/Ruan-pysoft/rholisp">projects</a> which I'd complete in a matter of days or weeks.</p>
+
+<p>This mindset of simplicity, working on the current problems before me rather on hypothetical future usecases, and actually sticking to my projects, eventually helped me greatly in creating <a href=TODO>this</a> static site generator. I started after being inspired by Tsoding's <a href="https://youtu.be/OpoxlJ9e3Qg">video on Jai's metaprogramming capabilities</a>, where he creates a vaguely similar SSG in Jai. In the video, he created a templating system, where Jai itself is used for &quot;scripting&quot; (loops, substitutions, etc), and file contents was output to standard output. Coupled with my experience with <a href="https://github.com/tsoding/nob.h">nob.h</a>, as well as that I had previously made a <a href="https://github.com/Ruan-pysoft/platformer/blob/master/nob.c">two</a> <a href="https://github.com/Ruan-pysoft/platformer/blob/master/src_build/nob_configed.c">stage</a> build system with it, I decided to give making a similar SSG a shot, where I'd use C for any scripting needs and keep the templating as simple as possible.</p>
+
+<p>And it worked! At last, I have an SSG I'm happy with: one that's simple, one that I have a complete understanding of, one that I have complete control over, one that's powerful enough to do all I want, and probably quite a bit more – after all, I create the HTML pages by writing and running C programs, so every page in the website is created using a Turing-complete programming language.</p>
+
+<h2>Some interesting reads</h2>
+
+<p><sub><em>Vaguely related articles which you might enjoy</em></sub></p>
+
+<ul>
+<li><a href="https://idlewords.com/talks/website_obesity.htm">a very entertaining read about website bloat</a></li>
+    <li><a href="https://qntm.org/urls">article on url structure</a>, my url scheme is very loosely inspired by it</li>
+</ul>
+
+<hr>
+
+<p>Initial html generated from markdown by md2html <br>
+First draft available as a 48-minute recording <a href="./draft1.m4a">here</a> <br>
+Transcription of first draft by <a href="https://github.com/ggml-org/whisper.cpp">whisper.cpp</a> available <a href="./draft1-transcript.txt">here</a></p>
+
+${blog_article_end();}$
