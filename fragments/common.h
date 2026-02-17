@@ -38,7 +38,7 @@ ${void footer(void) {}$
 $[toggle_ignore]$
     </main>
     <footer id="footer">
-        <p>&copy; 2023&mdash;2025 <a href="https://pysoft.co.za">Ruan</a></p>
+        <p>&copy; 2023&mdash;2026 <a href="https://pysoft.co.za">Ruan</a></p>
         <p>Some css from <a href="https://hastysite.h3rald.com">HastySite</a></p>
         <p>
             Website content licensed under the 
@@ -61,6 +61,14 @@ ${const char *asset(const char *name) {
 }}$
 ${const char *image(const char *name) {
     return asset(temp_sprintf("/images/%s", name));
+}}$
+
+${void makeLinkTo(const char *name, const char *path) {
+    printf("<a href=\"%s\">%s</a>", path, name);
+}}$
+
+${void makeLink(const char *path) {
+    makeLinkTo(path, path);
 }}$
 
 ${
