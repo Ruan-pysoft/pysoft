@@ -19,8 +19,14 @@ static const BlogEntry blog_entries[] = {
     {
         .id = "website",
         .title = "Finally, a website!",
-        .description = "(TODO)",
+        .description = "at last I have a working website; how did I get here, and why not earlier?",
         .pub_date = "2026-02-16",
+    },
+    {
+        .id = "proclisp",
+        .title = "The Power of Lisp: Writing a Procedural Dialect",
+        .description = "demonstrating the power of lisp by creating a procedural dialect of rholisp using macros",
+        .pub_date = "2026-02-17",
     },
 };
 static const size_t blog_entries_count = sizeof(blog_entries)/sizeof(*blog_entries);

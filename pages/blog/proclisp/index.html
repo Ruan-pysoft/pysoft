@@ -1,0 +1,168 @@
+${blog_article_begin("proclisp");}$
+
+${
+#define wiki(text, article) makeLinkTo(text, "https://en.wikipedia.org/wiki/" article)
+}$
+
+<p>Recently I've been having a lot of fun with ${makeLinkTo("my lisp dialect", "/project/rholisp");}$.</p>
+
+<p>The interesting thing is that the basic model of how functions and macros work, was finalised within the first few days of me working on it; most of my time was spent on writing and debugging the garbage collector, adding new types, adding new builtins, and implementing ${wiki("tail call optimisation", "Tail_call");}$. And of course extending the format of user-defined functions and macros to allow for documentation and an associated name.</p>
+
+<p>But the basics of how a function or a macro work is quite simple, and yet despite its simplicity it is quite powerful.</p>
+
+<h2>Transforming code</h2>
+
+<p>Macro application takes in its arguments as-is, and substitutes for the associated parameter name anywhere it is found in its body. This substituted body is then evaluated.</p>
+
+<p>For example, take the following two macros:</p>
+
+<pre><code>(defm += (var val) (:= var (+ var val)))
+(defm ++ (var) (+= var 1))
+</code></pre>
+
+<p>Now in the code <code>(++ i)</code> will expand to the macro application of <code>++</code> with <code>i</code> bound to <code>var</code>, and substituted into its body, giving <code>(+= i 1)</code>. Now when <em>that</em> is evaluated, it binds <code>i</code> to <code>var</code> and <code>1</code> to val, giving <code>(:= i (+ i 1))</code>. Its body is then evaluated (<code>:=</code> is a builtin macro, implemented in C, and <code>+</code> is a builtin function).</p>
+
+<p>What about something like <code>(+= n (println &quot;The answer is:&quot; 42))</code>? Now <code>n</code> is bound to <code>var</code>, and <code>(println &quot;The answer is:&quot; 42)</code> to <code>val</code>, with the macro expanding to <code>(:= n (+ n (println &quot;The answer is:&quot; 42)))</code>, which will display <code>The answer is: 42</code> to the terminal, before adding 42 to n and assigning the result to n.</p>
+
+<p>See if you can work out how <code>(defm while (cond body) (if cond (do body (while cond body))))</code> works.</p>
+
+<details>
+  <summary>answer</summary>
+  <p>Given some while loop, let's say <code>(while (< i 10) (++ i))</code>, it gets expanded to <code>(if (< i 10) (do (++ i) (while (< i 10) (++ i))))</code>.</p>
+
+  <p><code>if</code> will only evaluate its then-branch when the condition evaluates to true; in that case the body is run first (in this case <code>(++ i)</code>), before the while macro is expanded.</p>
+
+  <p>Something you might notice is that the <code>while</code> macro at the end of the <code>if</code> is the very same as the <code>while</code> which produced the if! So, as long as the condition is true, <code>while</code> will produce and call itself, implementing iteration through recursion.</p>
+
+</details>
+
+<p>Now, you might already be starting to see how powerful these macros can be. But how powerful are they exactly? Certainly, I can define some amount of new syntax${fn();}$ like the while loop. But could I do something like transform this functional language into a procedural one?</p>
+${fn_text(}$$"In fact, <code>defm</code> is itself a macro, with <code>(defm name (params) body)</code> expanding approximately to <code>(def name (quote (params) (name &quot;&quot;) T body))</code>."$${);}$
+
+<h2>Procedural Code in a Functional Language?${fn();}$</h2>
+${fn_text("yes, I know even languages like Haskell allow you to do this, but I have no language-level support for it");}$
+
+<p>As it turns out, the answer is yes.</p>
+
+<p>The easy part is actually to write the ${makeLinkTo("new procedural syntax", "https://github.com/Ruan-pysoft/rholisp/blob/master/procedural.lisp");}$, taking a bit less than 100 lines to create <code>let</code> (an alias for <code>def</code> for style points), and <code>fun</code> to define a procedural function, with procedural functions coming with their own ${makeLinkTo("full environment", "https://github.com/Ruan-pysoft/rholisp/tree/master?tab=readme-ov-file#types-of-environment");}$, automatically allowing multiple expressions for its body without needing an explicit <code>do</code>, and requiring that the return value be specified with a <code>return</code> expression, rather than returning the last value in its body, as well as supporting <code>for</code> loops <em>with</em> <code>break</code>!</p>
+
+<p>This allows me to take lisp code like this:</p>
+
+<pre><code>(defn fib (n) (tmpfn (a b n)
+  (if n (rec b (+ a b) (- n 1)) a)
+  (0 1 n)
+)
+</code></pre>
+
+<p>And write it in a more familiar style as follows:</p>
+
+<pre><code>(fun fib (n)
+  (let a 0)
+  (let b 0)
+  (for (let i 0) (&lt; i n) (++ i)
+    (let tmp b)
+    (:= b (+ a b))
+    (:= a tmp)
+  )
+  (return a)
+)
+</code></pre>
+
+<p>This gets expanded to the following monstrosity (cleaned up a bit for your viewing pleasure), if you're interested:</p>
+
+<pre><code>(defn fib (n)
+  &quot;a procedural function&quot;
+  (.fun.extract-val (env-new (or
+    ()
+    (do (let a 0) ())
+    (do (let b 0) ())
+    (.fun.for.transform (env-new (do
+      (def .fun.for.rec (\ ()
+        (if (&lt; i n) (or
+          (do (let tmp b) ())
+          (do (:= b (+ a b)) ())
+          (do (:= a tmp) ())
+          (do (++ i) ())
+          (.fun.for.rec)
+        ))
+      ))
+      (let i 0)
+      (.fun.for.rec)
+    )))
+    (list a)
+  )))
+)
+</code></pre>
+
+<p>Here I employ a few interesting tricks to make everything work. You might notice most of the expressions are wrapped in <code>(do ... ())</code>, but the <code>(return a)</code> transformed into a <code>(list a)</code>. This is so that I can implement the body with <code>or</code>, which will return the first truthy value; then I make all non-return expressions give back (), which is falsy, so that execution might continue, and I wrap the retuned value in a list, as any non-empty list is truthy (allowing me to return falsy values such as 0 or F). Then <code>.fun.extract-val</code> will unwrap the value out of the list, or leave the empty list as-is.</p>
+
+<p>For the <code>for</code> loop I do something similar. First, I must transform it into a recursive function (as looping is not natively supported by rholisp), and I do the same transformations to the expressions in its body. Except that <code>(break)</code> gets transformed into a simple T, also breaking out of the loop, but not with a value wrapped in a list. <code>.fun.for.transform</code> then just turns T into () and leaves other values untouched, preventing breaking out of the loop from returning from the function.</p>
+
+<p>As simple as that! Well, simple in concept, the implementation took a few hours, but it wasn't too bad.</p>
+
+<h2>And Procedural Scripts as Well</h2>
+
+<p>But now comes the next step. I don't want the ability to write procedural code in my functional language. I want to be able to write procedural files: only variable and function definitions allowed top-level, and only the procedural style. The program logic then sits in <code>main</code>, which is called implicitly.</p>
+
+<p>Surely this cannot be done, at least without fiddling with the interpreter source, or doing some sort of halfway bootstrapping, right?</p>
+
+<p>Well, as it turns out, it can. I can't quite define a macro which prevents non-procedural (top level) code going forward, but what I <em>can</em> do is ${makeLinkTo("write a program", "https://github.com/Ruan-pysoft/rholisp/blob/master/run-procedural.lisp");}$ to run procedural scripts; and then run the code only with <code>eval</code>, using the existing interpreter plus macros, rather than having to implement my own syntax.</p>
+
+<p>This program is a bit longer was harder for me to write, taking a day or two, but conceptually it isn't that complicated.</p>
+
+<p>${makeLinkTo("First", "https://github.com/Ruan-pysoft/rholisp/blob/master/run-procedural.lisp#L94");}$, it reads the file specified by the command line argument, before parsing it into a list of sequential lisp values and storing the parsed program into a variable (<code>.run-procedural.prog</code>).</p>
+
+<p>I then define and run a temporary function, which will, as long as more values remain in the program, check if the value is allowed top-level, run it if it is, and display an error otherwise.</p>
+
+<p>Lastly, with <code>(exit (main args))</code> I run the main function and exit with the status code specified by its result.</p>
+
+<p>Now, in order to check whether an expression is allowed top level, one must simply check that it is a non-empty list (that is, a function call or macro application), and that the first element of this expression (the function or macro) is in the list of allowed names (currently being <code>include</code>, <code>let</code>, and <code>fun</code>). Simple.</p>
+
+<p>Unless, that is, you want to allow arbitrary macros that expand to one of the allowed expressions. Now it becomes a fun programming challenge.</p>
+
+<p>So, if the name does not match, the first thing to do is to fetch its value, and ${makeLinkTo("check", "https://github.com/Ruan-pysoft/rholisp/blob/master/run-procedural.lisp#L56");}$ if its a callable and a macro${fn();}$. If not, well, then its not allowed. If so, we must now expand the macro, and for this we need code that 1) understands the structure of a macro, and 2) can then expand the macro, one step at a time and without evaluating the result.${fn();}$</p>
+${fn_text(}$$"it should also be checked that it is a user-defined macro and not a builtin macro; manual expansion of a builtin macro isn't possible, never mind that a built in macro can have arbitrary side effects"$${);}$
+${fn_text(}$$"of course, while we are doing this we should keep track of how many times the macro has expanded; as shown by the <code>while</code> macro, a macro could expand an indefinite amount of times, so we have to artificially impose a limit on how many times a macro may expand before we by default assume it isn't allowed"$${);}$
+
+<p>The structure of a user-defined macro is not too complicated: Once we know it <em>is</em> a macro, we know that the second element is the parameter list, and the last is the body. From there we just have to pair the parameters up with the arguments${fn();}$ and call the <code>subs-with</code> builtin with the parameter-argument bindings and the body of the macro. This will then perform substitution using the interpreter's substitution function, the same function as is used to actually implement user-defined macros.</p>
+${fn_text(}$$"taking care to also handle variadic macros, where the last parameter is preceded by () and binds to a list containing all the remaining arguments, if any"$${);}$
+
+<h2>Do This and That and That as Well</h2>
+
+<p>And so we have a functional procedural dialect!${fn();}$</p>
+${fn_text(}$$"if you'll excuse the pun ;)"$${);}$
+
+<p>A program written in the procedural dialect is available ${makeLinkTo("here", "https://github.com/Ruan-pysoft/rholisp/blob/master/proctest.lisp");}$, which you can compare to a program written the ${makeLinkTo("usual way", "https://github.com/Ruan-pysoft/rholisp/blob/master/script.lisp");}$.</p>
+
+As a quick comparison, here's a ${makeLinkTo("truth machine", "https://esolangs.org/wiki/Truth-machine");}$ program, first implemented functionally, the procedurally:
+
+<pre><code>(defn truth-machine (inp)
+  (if (do (print-val inp) inp) ; print the input, then check if it is truthy (input must be printed at least once)
+    (truth-machine 1)          ; loop if input is truthy
+  )
+)
+
+(pstr "Enter either 0 or 1:")
+
+(truth-machine (scd (parse (readline stdin)))) ; assume the user entered a valid lisp value
+</code></pre>
+
+<hr>
+
+<pre><code>(fun truth-machine (inp)
+  (print-val inp)            ; print the input
+  (if inp (truth-machine 1)) ; loop if the input is truthy (== 1)
+)
+
+(fun main (args)
+  (pstr "Enter either 0 or 1:")
+
+  (truth-machine (scd (parse (readline stdin)))) ; assume the user entered a valid lisp value
+
+  (return 0)
+)
+</code></pre>
+
+<p>Okay, maybe a truth machine program doesn't give the greatest demonstration of the differences, but go and check how the fibonacci program is implemented in the procedural program compared to functionally in ${makeLinkTo("util.lisp", "https://github.com/Ruan-pysoft/rholisp/blob/master/util.lisp");}$.</p>
+
+${blog_article_end();}$
