@@ -50,13 +50,31 @@ da_foreach(struct blip, blip, &blips) {
     const char *blip_url = temp_sprintf("blips/%04d%02d%02d/%s.html", blip->year, blip->month, blip->day, blip->slug);
 
     FILE *blip_file = create_site_file(blip_url);
+    OUTFILE = blip_file;
 
-    fprintf(blip_file, "<!DOCTYPE html><html><head><title>%s – blip</title></head><body><p>%s</p></body></html>", blip->slug, blip->content);
+    const char *saved_title = page_title;
+    const char *saved_description = page_description;
+    const char *saved_extra = head_extra;
+    const char *saved_license = license_extra;
 
+    page_title = temp_sprintf("%s – blip", blip->slug);
+    page_description = temp_sprintf("a random thought about \"%s\"", blip->slug);
+    head_extra = NULL;
+    license_extra = NULL;
+
+    header();
+}$<p>$(blip->content)$</p>${
+    footer();
+
+    page_title = saved_title;
+    page_description = saved_description;
+    head_extra = saved_extra;
+    license_extra = saved_license;
+
+    OUTFILE = stdout;
     fclose(blip_file);
 
     temp_rewind(mark);
 }
 }$
-${exit(1);}$
 ${footer();}$

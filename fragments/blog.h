@@ -64,7 +64,7 @@ void blog_article_begin(const char *id) {
 
     header();
 
-    printf("<h1>%s</h1>", page_title);
+    fprintf(OUTFILE, "<h1>%s</h1>", page_title);
 }
 
 void blog_article_end() {
@@ -76,11 +76,11 @@ void blog_article_end() {
         : NULL;
 
     if (prev_link && next_link) {
-        printf("<div class=\"series-link-container\">%s — %s</div>", prev_link, next_link);
+        fprintf(OUTFILE, "<div class=\"series-link-container\">%s — %s</div>", prev_link, next_link);
     } else if (prev_link) {
-        printf("<div class=\"series-link-container\">%s</div>", prev_link);
+        fprintf(OUTFILE, "<div class=\"series-link-container\">%s</div>", prev_link);
     } else if (next_link) {
-        printf("<div class=\"series-link-container\">%s</div>", next_link);
+        fprintf(OUTFILE, "<div class=\"series-link-container\">%s</div>", next_link);
     }
 
     footer();

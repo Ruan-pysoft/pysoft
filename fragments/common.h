@@ -25,7 +25,7 @@ $[toggle_ignore]$
         <nav id="navbar">
         ${for (size_t i = 0; i < nav_links_count; ++i) {}$
             ${const NavLink link = nav_links[i];}$
-            <a href="$(link.href)$" ${if (link.id) {}$ id="$(link.id)$" ${}}$>${printf(link.name);}$</a>
+            <a href="$(link.href)$" ${if (link.id) {}$ id="$(link.id)$" ${}}$>$(link.name)$</a>
         ${}}$
         </nav>
     </header>
@@ -65,7 +65,7 @@ ${const char *image(const char *name) {
 }}$
 
 ${void makeLinkTo(const char *name, const char *path) {
-    printf("<a href=\"%s\">%s</a>", path, name);
+    fprintf(OUTFILE, "<a href=\"%s\">%s</a>", path, name);
 }}$
 
 ${void makeLink(const char *path) {
@@ -83,7 +83,7 @@ void fn(void) {
     nob_da_append(&footnotes, NULL);
 
     const size_t fn_num = footnotes.count;
-    printf("<sup><a href=\"#fn%lu\" id=\"fnref%lu\" class=\"footnote-ref\">%lu</a></sup>", fn_num, fn_num, fn_num);
+    fprintf(OUTFILE, "<sup><a href=\"#fn%lu\" id=\"fnref%lu\" class=\"footnote-ref\">%lu</a></sup>", fn_num, fn_num, fn_num);
 }
 void fn_text(const char *text) {
     size_t idx = 0;
@@ -96,7 +96,7 @@ void fn_text(const char *text) {
     }
     footnotes.items[idx] = text;
     const size_t fn_num = idx+1;
-    printf("<div class=\"footnote\" id=\"fn%lu\"><sup><a href=\"#fnref%lu\" class=\"footnote-backref\">^%lu</a></sup> %s</div>", fn_num, fn_num, fn_num, text);
+    fprintf(OUTFILE, "<div class=\"footnote\" id=\"fn%lu\"><sup><a href=\"#fnref%lu\" class=\"footnote-backref\">^%lu</a></sup> %s</div>", fn_num, fn_num, fn_num, text);
 }
 }$
 

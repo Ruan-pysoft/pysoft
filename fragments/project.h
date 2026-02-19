@@ -82,15 +82,15 @@ void project_begin(const char *id) {
 
     header();
 
-    printf("<h1>%s</h1>", page_title);
+    fprintf(OUTFILE, "<h1>%s</h1>", page_title);
 
     if (project.link) {
-        printf("<p><sub>External project link: <a href=\"%s\">%s</a></sub></p>", project.link, project.link);
+        fprintf(OUTFILE, "<p><sub>External project link: <a href=\"%s\">%s</a></sub></p>", project.link, project.link);
     }
 }
 
 void project_end() {
-    printf("<p><a href=\"/project\">Back to list of projects</a></p>");
+    fprintf(OUTFILE, "<p><a href=\"/project\">Back to list of projects</a></p>");
 
     footer();
 
