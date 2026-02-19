@@ -243,3 +243,8 @@ footer {
 .series-link-container a.next-link {
   text-align: right;
 }
+
+pre {
+  /* don't let long pieces of code increase the width of the page */
+  overflow: scroll;
+}
