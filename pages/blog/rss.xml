@@ -1,0 +1,52 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Ruan's Personal Blog</title>
+		<link>https://pysoft.co.za/blog/</link>
+		<description>Ruan's personal blog: programming, maths, language, philosophy, and more! ...eventually</description>
+		<language>en-za</language>
+${
+const char months[12][4] = {
+	"Jan", "Feb", "Mar", "Apr",
+	"May", "Jun", "Jul", "Aug",
+	"Sep", "Oct", "Nov", "Dec",
+};
+time_t now = time(NULL);
+struct tm *now_parts = gmtime(&now);
+}$
+		<pubDate>${printf(
+			"%02d %s %04d %02d:%02d:%02d GMT",
+			now_parts->tm_mday,
+			months[now_parts->tm_mon],
+			now_parts->tm_year + 1900,
+			now_parts->tm_hour,
+			now_parts->tm_min,
+			now_parts->tm_sec
+		);}$</pubDate>
+		<docs>https://www.rssboard.org/rss-specification</docs>
+		<generator>Ruan's custom Static Site Generator</generator>
+		<atom:link href="https://pysoft.co.za/blog/rss.xml" rel="self" type="application/rss+xml" />
+		<skipHours>
+			<!-- slight chance I might publish content after eleven, but I reckon that'd be quite rare -->
+			<hour>1</hour> <!-- 11PM -->
+			<hour>2</hour> <!-- 12AM -->
+			<hour>3</hour> <!-- 1AM -->
+			<hour>4</hour> <!-- 2AM -->
+			<hour>5</hour> <!-- 3AM -->
+			<hour>6</hour> <!-- 4AM -->
+			<hour>7</hour> <!-- 5AM -->
+		</skipHours>
+${for (size_t i = 0; i < blog_entries_count; ++i) { BlogEntry entry = blog_entries[i];}$
+${int day = get_day_from_date(entry.pub_date);}$
+${const char *month = months[get_month_from_date(entry.pub_date)-1];}$
+${int year = get_year_from_date(entry.pub_date);}$
+		<item>
+			<title>$(entry.title)$</title>
+			<link>https://pysoft.co.za/blog/$(entry.id)$/</link>
+			<description>$(entry.description)$ &lt;br&gt; &lt;iframe title=&quot;blog post embed&quot; src=&quot;https://pysoft.co.za/blog/$(entry.id)$/&quot;&gt;&lt;/iframe&gt;</description>
+			<!-- NOTE: I don't keep track of publication time, only publication date -->
+			<pubDate>${printf("%02d %s %04d 00:00:00 GMT", day, month, year);}$</pubDate>
+			<guid isPermaLink="true">https://pysoft.co.za/blog/$(entry.id)$/</guid>
+		</item>
+${}}$
+	</channel>
+</rss>

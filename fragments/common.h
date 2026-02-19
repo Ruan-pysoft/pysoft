@@ -1,4 +1,5 @@
 ${#include "nav.h"}$
+${#include <time.h>}$
 
 ${static const char *page_title = NULL;}$
 ${static const char *page_description = "Ruan's personal website - under construction...";}$
@@ -96,5 +97,46 @@ void fn_text(const char *text) {
     footnotes.items[idx] = text;
     const size_t fn_num = idx+1;
     printf("<div class=\"footnote\" id=\"fn%lu\"><sup><a href=\"#fnref%lu\" class=\"footnote-backref\">^%lu</a></sup> %s</div>", fn_num, fn_num, fn_num, text);
+}
+}$
+
+${
+#define is_digit(ch) ('0' <= (ch) && (ch) <= '9')
+bool date_validate(const char *date) {
+    // date must be in YYYY-mm-DD format
+    if (
+        !is_digit(date[0]) || !is_digit(date[1]) || !is_digit(date[2]) || !is_digit(date[3])
+        || date[4] != '-'
+        || !is_digit(date[5]) || !is_digit(date[6])
+        || date[7] != '-'
+        || !is_digit(date[8]) || !is_digit(date[9])
+    ) {
+        nob_log(ERROR, "Date '%s' is not in YYYY-mm-DD format!", date);
+        return false;
+    }
+    return true;
+}
+int get_day_from_date(const char *date) {
+    if (!date_validate(date)) return 1;
+    const int day = (date[8]-'0')*10 + (date[9]-'0');
+    if (day == 0 || day > 31) {
+        nob_log(ERROR, "In date '%s', day should be in the range 1-31 (inclusive)!", date);
+        return 1;
+    }
+    return day;
+}
+int get_month_from_date(const char *date) {
+    if (!date_validate(date)) return 1;
+    const int month = (date[5]-'0')*10 + (date[6]-'0');
+    if (month == 0 || month > 12) {
+        nob_log(ERROR, "In date '%s', month should be in the range 1-12 (inclusive)!", date);
+        return 1;
+    }
+    return month;
+}
+int get_year_from_date(const char *date) {
+    if (!date_validate(date)) return 1;
+    const int year = (date[0]-'0')*1000 + (date[1]-'0')*100 + (date[2]-'0')*10 + (date[3]-'0');
+    return year;
 }
 }$

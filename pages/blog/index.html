@@ -3,6 +3,7 @@ ${page_description = "index page of Ruan's personal blog: programming, maths, la
 ${header();}$
 <h1>$(page_title)$</h1>
 <p>This is my blog.</p>
+<p>An RSS feed is available ${makeLinkTo("here", "rss.xml");}$.</p>
 <ul>
     ${// Iterate over blog entries in reverse order so that the newest entry comes first;}$
     ${size_t i = blog_entries_count; while (i --> 0) {}$
