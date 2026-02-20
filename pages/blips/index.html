@@ -16,22 +16,6 @@ struct {
     size_t capacity;
 } blips = {0};
 
-for (size_t i = 0; i < BLIPS_PER_PAGE + 42; ++i) {
-    nob_da_append(&blips, ((struct blip) {
-        .year = 2026,
-        .month = 2,
-        .day = 20,
-        .index = i,
-
-        .slug = temp_sprintf("autogend-%03lu", i),
-        .has_time = false,
-        .hour = 0,
-        .minute = 0,
-
-        .content = temp_sprintf("Hi there, this is the %lu-th test blip", i),
-    }));
-}
-
 da_foreach(const char *, it, &blip_files) {
     const size_t mark = temp_save();
 
