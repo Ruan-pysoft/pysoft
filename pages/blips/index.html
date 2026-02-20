@@ -92,6 +92,7 @@ da_foreach(struct blip, blip, &blips) {
     <article class="blip">
     <p>$(blip->content)$</p>
     </article>
+    <p><a href="/blips/">Back to index of blips</a></p>
     ${
     if (blip->has_time) {}$
         <div class="blip-time">Time posted: $("%02d:%02d", blip->hour, blip->minute)$ SAST</div>
@@ -121,7 +122,7 @@ ${
 for (size_t i = 0; i < on_first_page; ++i) {
     struct blip *blip = &blips.items[i];
     }$
-    <h3>$(blip->slug)$ – blip on $("%04d-%02d-%02d", blip->year, blip->month, blip->day)$</h3>
+    <h3><a href="/blips/$("%04d%02d%02d/%s.html", blip->year, blip->month, blip->day, blip->slug)$">$(blip->slug)$</a> – blip on $("%04d-%02d-%02d", blip->year, blip->month, blip->day)$</h3>
     <article class="blip">
     <p>$(blip->content)$</p>
     </article>
@@ -130,6 +131,91 @@ for (size_t i = 0; i < on_first_page; ++i) {
         <div class="blip-time">Time posted: $("%02d:%02d", blip->hour, blip->minute)$ SAST</div>
     ${}
     }$<hr>${
+}
+
+if (on_first_page < blips.count) {
+    }$
+<div class="series-link-container"><a href="/blips/2" class="next-link">Page 2 →</a></div>
+    ${
+}
+
+if (on_first_page < blips.count) {
+    const size_t mark = temp_save();
+
+    const char *saved_title = page_title;
+    const char *saved_description = page_description;
+    const char *saved_extra = head_extra;
+    const char *saved_license = license_extra;
+
+    size_t page_num = 1;
+    FILE *blips_page_file = NULL;
+
+    for (size_t i = on_first_page; i < blips.count; ++i) {
+        if (i % BLIPS_PER_PAGE == 0) {
+            if (blips_page_file) {
+                }$
+<div class="series-link-container">
+    <a href="/blips/${if (page_num > 2)}$$("%lu", page_num-1)$" class="prev-link">← Page $("%lu", page_num-1)$</a>
+    –
+    <a href="/blips/$("%lu", page_num+1)$" class="next-link">Page $("%lu", page_num+1)$ →</a>
+</div>
+                ${
+
+                footer();
+            }
+
+            ++page_num;
+
+            create_site_dir(temp_sprintf("blips/%lu", page_num));
+            FILE *newfile = create_site_file(temp_sprintf("blips/%lu/index.html", page_num));
+
+            OUTFILE = newfile;
+            if (blips_page_file) fclose(blips_page_file);
+            blips_page_file = newfile;
+
+            page_title = temp_sprintf("Blips, page %lu", page_num);
+            page_description = "index of blips on Ruan's site";
+            head_extra = NULL;
+            license_extra = NULL;
+
+            header();
+            }$
+<h1>$(page_title)$</h1>
+<i>Page $("%lu", page_num)$</i>
+<p><a href="/blips/">Back to index of blips</a></p>
+            ${
+        }
+
+        struct blip *blip = &blips.items[i];
+        }$
+        <h3><a href="/blips/$("%04d%02d%02d/%s.html", blip->year, blip->month, blip->day, blip->slug)$">$(blip->slug)$</a> – blip on $("%04d-%02d-%02d", blip->year, blip->month, blip->day)$</h3>
+        <article class="blip">
+        <p>$(blip->content)$</p>
+        </article>
+        ${
+        if (blip->has_time) {}$
+            <div class="blip-time">Time posted: $("%02d:%02d", blip->hour, blip->minute)$ SAST</div>
+        ${}
+        }$<hr>${
+    }
+
+    }$
+<div class="series-link-container">
+    <a href="/blips/${if (page_num > 2)}$$("%lu", page_num-1)$" class="prev-link">← Page $("%lu", page_num-1)$</a>
+</div>
+    ${
+
+    footer();
+
+    page_title = saved_title;
+    page_description = saved_description;
+    head_extra = saved_extra;
+    license_extra = saved_license;
+
+    OUTFILE = stdout;
+    fclose(blips_page_file);
+
+    temp_rewind(mark);
 }
 }$
 ${footer();}$
