@@ -4,6 +4,8 @@ ${header();}$
 <h1>$(page_title)$</h1>
 <i>Like a tweet, but more robotic</i>
 ${
+#define BLIPS_PER_PAGE 100
+
 File_Paths blip_files = {0};
 const char *blips_dir = WORKING_DIR"/blips/";
 if (!read_entire_dir(blips_dir, &blip_files)) return 1;
@@ -13,6 +15,22 @@ struct {
     size_t count;
     size_t capacity;
 } blips = {0};
+
+for (size_t i = 0; i < BLIPS_PER_PAGE + 42; ++i) {
+    nob_da_append(&blips, ((struct blip) {
+        .year = 2026,
+        .month = 2,
+        .day = 20,
+        .index = i,
+
+        .slug = temp_sprintf("autogend-%03lu", i),
+        .has_time = false,
+        .hour = 0,
+        .minute = 0,
+
+        .content = temp_sprintf("Hi there, this is the %lu-th test blip", i),
+    }));
+}
 
 da_foreach(const char *, it, &blip_files) {
     const size_t mark = temp_save();
@@ -42,6 +60,13 @@ da_foreach(const char *, it, &blip_files) {
 }
 
 blips_sort(blips.items, blips.count);
+// get reverse chronological order:
+struct blip tmp;
+for (size_t i = 0; i < blips.count/2; ++i) {
+    tmp = blips.items[blips.count - i - 1];
+    blips.items[blips.count - i - 1] = blips.items[i];
+    blips.items[i] = tmp;
+}
 
 da_foreach(struct blip, blip, &blips) {
     const size_t mark = temp_save();
@@ -63,7 +88,14 @@ da_foreach(struct blip, blip, &blips) {
     license_extra = NULL;
 
     header();
-}$<p>$(blip->content)$</p>${
+    }$
+    <article class="blip">
+    <p>$(blip->content)$</p>
+    </article>
+    ${
+    if (blip->has_time) {}$
+        <div class="blip-time">Time posted: $("%02d:%02d", blip->hour, blip->minute)$ SAST</div>
+    ${}
     footer();
 
     page_title = saved_title;
@@ -74,7 +106,30 @@ da_foreach(struct blip, blip, &blips) {
     OUTFILE = stdout;
     fclose(blip_file);
 
+    }$
+    ${
+
     temp_rewind(mark);
+}
+
+const size_t on_first_page = blips.count < BLIPS_PER_PAGE ? blips.count : BLIPS_PER_PAGE;
+const size_t pages = (blips.count + BLIPS_PER_PAGE-1)/BLIPS_PER_PAGE;
+}$
+<h2>Most Recent Blips</h2>
+<p>Here are the $("%d", on_first_page)$ most recent blips:<p>
+${
+for (size_t i = 0; i < on_first_page; ++i) {
+    struct blip *blip = &blips.items[i];
+    }$
+    <h3>$(blip->slug)$ – blip on $("%04d-%02d-%02d", blip->year, blip->month, blip->day)$</h3>
+    <article class="blip">
+    <p>$(blip->content)$</p>
+    </article>
+    ${
+    if (blip->has_time) {}$
+        <div class="blip-time">Time posted: $("%02d:%02d", blip->hour, blip->minute)$ SAST</div>
+    ${}
+    }$<hr>${
 }
 }$
 ${footer();}$

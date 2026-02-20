@@ -259,3 +259,24 @@ pre {
   /* don't let long pieces of code increase the width of the page */
   overflow: scroll;
 }
+
+.blip-time {
+  text-align: center;
+  font-style: italic;
+}
+
+.blip {
+  text-align: center;
+  line-height: 0.5;
+  border: 1px solid white;
+  padding: 0.25em 0.5em;
+  border-radius: 0.5em;
+  margin: 1em 5em;
+}
+
+@media print {
+  .blip {
+    border-color: black;
+    border-width: 2px;
+  }
+}
