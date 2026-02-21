@@ -1,0 +1,5 @@
+libffi 13:35
+
+Finally got a working command-line interface for interacting with dynamically loaded libraries! Inspired by a <a href="https://youtu.be/0o8Ex8mXigU">tsoding video</a> I watched a few years ago.</p>
+
+<p><img style="max-width: 100%;" src="/blips/20260221/libffi.png" alt="screenshot of a test raylib window">
