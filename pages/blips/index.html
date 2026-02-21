@@ -73,15 +73,17 @@ da_foreach(struct blip, blip, &blips) {
 
     header();
     }$
-    <h1>$(blip->slug)$</h1>
+    <h1>$(blip->slug)$ – blip on $("%04d-%02d-%02d", blip->year, blip->month, blip->day)$</h1>
     <article class="blip">
     <p>$(blip->content)$</p>
     </article>
-    <p><a href="/blips/">Back to index of blips</a></p>
     ${
     if (blip->has_time) {}$
         <div class="blip-time">Time posted: $("%02d:%02d", blip->hour, blip->minute)$ SAST</div>
     ${}
+    }$
+    <p><a href="/blips/">Back to index of blips</a></p>
+    ${
     footer();
 
     page_title = saved_title;
