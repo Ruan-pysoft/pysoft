@@ -1,0 +1,157 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>Ruan's Blips</title>
+		<link>https://pysoft.co.za/blog/</link>
+		<description>Random thoughts and things from me</description>
+		<language>en-za</language>
+${
+const char months[12][4] = {
+	"Jan", "Feb", "Mar", "Apr",
+	"May", "Jun", "Jul", "Aug",
+	"Sep", "Oct", "Nov", "Dec",
+};
+int days_in_month[12] = {
+	31, 28, 31, 30,
+	31, 30, 31, 30,
+	31, 31, 30, 31,
+};
+time_t now = time(NULL);
+struct tm *now_parts = gmtime(&now);
+}$
+		<pubDate>${printf(
+			"%02d %s %04d %02d:%02d:%02d GMT",
+			now_parts->tm_mday,
+			months[now_parts->tm_mon],
+			now_parts->tm_year + 1900,
+			now_parts->tm_hour,
+			now_parts->tm_min,
+			now_parts->tm_sec
+		);}$</pubDate>
+		<docs>https://www.rssboard.org/rss-specification</docs>
+		<generator>Ruan's custom Static Site Generator</generator>
+		<atom:link href="https://pysoft.co.za/blips/rss.xml" rel="self" type="application/rss+xml" />
+		<skipHours>
+			<!-- slight chance I might publish content after eleven, but I reckon that'd be quite rare -->
+			<hour>1</hour> <!-- 11PM -->
+			<hour>2</hour> <!-- 12AM -->
+			<hour>3</hour> <!-- 1AM -->
+			<hour>4</hour> <!-- 2AM -->
+			<hour>5</hour> <!-- 3AM -->
+			<hour>6</hour> <!-- 4AM -->
+			<hour>7</hour> <!-- 5AM -->
+		</skipHours>
+${
+File_Paths blip_files = {0};
+const char *blips_dir = WORKING_DIR"/blips/";
+if (!read_entire_dir(blips_dir, &blip_files)) return 1;
+
+struct {
+    struct blip *items;
+    size_t count;
+    size_t capacity;
+} blips = {0};
+
+da_foreach(const char *, it, &blip_files) {
+    const size_t mark = temp_save();
+
+    const char *blip_file = *it;
+    if (strcmp(blip_file, ".") == 0 || strcmp(blip_file, "..") == 0) {
+        continue;
+    }
+    const char *path = temp_sprintf("%s/%s", blips_dir, blip_file);
+
+    switch (get_file_type(path)) {
+    case FILE_REGULAR: {
+        nob_da_append(&blips, parse_blip(blip_file, path));
+    } break;
+    case FILE_DIRECTORY: {
+        nob_log(WARNING, "Found directory in blips folder: ", blip_file);
+    } break;
+    case FILE_SYMLINK: {
+        nob_log(WARNING, "Found symlink in blips folder: ", blip_file);
+    } break;
+    case FILE_OTHER: {
+        nob_log(WARNING, "Found strange file in blips folder: ", blip_file);
+    } break;
+    }
+
+    temp_rewind(mark);
+}
+
+blips_sort(blips.items, blips.count);
+// get reverse chronological order:
+struct blip tmp;
+for (size_t i = 0; i < blips.count/2; ++i) {
+    tmp = blips.items[blips.count - i - 1];
+    blips.items[blips.count - i - 1] = blips.items[i];
+    blips.items[i] = tmp;
+}
+
+da_foreach(struct blip, blip, &blips) {
+	const char *month = months[blip->month-1];
+
+	String_Builder sb = {0};
+	sb_append_cstr(&sb, "&lt;p&gt;");
+	for (const char *ch = blip->content; *ch; ++ch) {
+		if (strncmp(ch, "src=\"/", 6) == 0) {
+			// probably not the safest way to do this, but it's a quick hack which should work...
+			sb_append_cstr(&sb, "src=&quot;https://pysoft.co.za/");
+			ch += 6;
+			--ch;
+		} else if (*ch == '&') {
+			sb_append_cstr(&sb, "&amp;");
+		} else if (*ch == '<') {
+			sb_append_cstr(&sb, "&lt;");
+		} else if (*ch == '>') {
+			sb_append_cstr(&sb, "&gt;");
+		} else if (*ch == '"') {
+			sb_append_cstr(&sb, "&quot;");
+		} else {
+			da_append(&sb, *ch);
+		}
+	}
+	sb_append_cstr(&sb, "&lt;/p&gt;");
+	sb_append_null(&sb);
+
+}$
+		<item>
+			<title>$(blip->slug)$</title>
+			<link>https://pysoft.co.za/blips/$("%04d%02d%02d/%s.html", blip->year, blip->month, blip->day, blip->slug)$</link>
+			<description>$(sb.items)$</description>
+			${if (blip->has_time) {
+				int year = blip->year;
+				int month = blip->month;
+				int day = blip->day;
+				int hour = blip->hour;
+				int minute = blip->minute;
+
+				// adjust from SAST (GMT+2) to GMT (UTC)
+				hour -= 2;
+				if (hour < 0) {
+					hour += 24;
+					--day;
+				}
+				if (day < 1) {
+					--month;
+					if (month < 1) {
+						--year;
+						month += 12;
+					}
+					if (month == 1 && year % 4 == 0 && year % 200 != 0) {
+						// feb on a leap year
+						day += 29;
+					} else {
+						day += days_in_month[month-1];
+					}
+				}
+			}$
+			<pubDate>$("%02d %s %04d %02d:%02d:00 GMT", day, months[month-1], year, hour, minute)$</pubDate>
+			${} else {}$
+			<!-- NOTE: I don't keep track of publication time, only publication date -->
+			<pubDate>$("%02d %s %04d 00:00:00 GMT", blip->day, month, blip->year)$</pubDate>
+			${}}$
+			<guid isPermaLink="false">$("%04d%02d%02d/%s", blip->year, blip->month, blip->day, blip->slug)$</guid>
+		</item>
+${}}$
+	</channel>
+</rss>
