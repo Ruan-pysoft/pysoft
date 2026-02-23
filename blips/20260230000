@@ -1,0 +1,20 @@
+almost-ffi 23:32
+
+I've been working a few hours a day to get a foreign function interface implemented for <a href="/project/rholisp">rholisp</a>, and at last I have something which can load a library, find a symbol in said library, and parse (at least in theory) the arguments and return type for the function. All that remains is to call it!</p>
+
+<pre><code>> (!ffi-load "libm.so.6")
+(clib 94310737492496)
+> (def libm _)
+()
+> (!ffi-sym libm "sin")
+(csym 139683202493344)
+> (def sin _)
+()
+> (!ffi-call sin ' i64 ' i64 1024) ; yes, this is incorrect, but floats will trigger an assertion for now, so I'm just going to pretend it takes and returns integers
+Calling function 0x7f0a87aa6ba0 with 1 arguments...
+()
+> (!ffi-unload libm)
+()
+></code></pre>
+
+<p>Above is some output demonstrating a seemingly working implementation
