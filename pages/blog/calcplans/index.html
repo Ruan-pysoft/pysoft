@@ -1,0 +1,95 @@
+${blog_article_begin("calcplans");}$
+
+<p>Recently, a friend of mine${fn();}$ at university started a Discord server where we will be having programming projects every few weeks. The first project that was posted, was to create a calculator program.</p>
+
+${fn_text(}$$"<a href="https://someonw-dev.com">this one</a>"$${);}$
+
+<p>Now, a simple <a href="https://en.wikipedia.org/wiki/PEDMAS">PEDMAS</a> command-line calculator is something I've done plenty of times before, though adding some functions like sin and cos might be interesting, but ultimately not more than a day of two of work, given my prior experience.</p>
+
+<p>But a calculator needn't necessarily be so boring. What about allowing <a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">Reverse Polish notation</a>? What about allowing juxtaposition for multiplication? Or defining your own functions?</p>
+
+<p>And if you're at the point where you're defining your own functions, you might as well make the calculator <a href="https://esolangs.org/wiki/Turing-complete">Turing-complete</a>. Heck, what is a calculator, other than a numerics-focused programming language?</p>
+
+<p>So here I'm going to flesh out a bit of the syntax of my proposed calculator language.</p>
+
+<p>First, I want to support user-defined functions, as well as three syntax modes: normal infix mode with order of operations, suffix mode (Reverse Polish), and prefix mode (almost like lisp, but without the brackets).</p>
+
+<p>First, let us consider a possible equation this calculator might accept:</p>
+
+<pre><code>6*7 + sin(5a)/fib(10)
+</code></pre>
+
+<p>This might decompose into the following <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">AST</a>${fn();}$:</p>
+
+<pre><code>      +
+   /     \
+  *      /
+ / \   /   \
+6   7 sin fib
+       |   |
+      (*) 10
+      / \
+     5   a
+</code></pre>
+
+${fn_text(}$$"conceptually at least; in practice I might evaluate the AST as I construct it, or use something like the <a href="https://en.wikipedia.org/wiki/Shunting_yard_algorithm">shunting yard algorithm</a> to construct some sort of representation of the equation other than an AST"$${);}$
+
+<p>And the final result should be <code>42 + [sin(5*a)/55]</code>, which would of course depend on the value of the variable a.</p>
+
+<p>Now how might this look in prefixed or postfixed notation? I thought about it for a bit, and came up with the following, which demonstrates a bit of a cursed idea I had:</p>
+
+<pre><code>prefixed:  + * 6 7 / sin 5a fib 10
+postfixed: 6 7 * 5a sin 10 fib / +
+</code></pre>
+
+<p>Did you notice the cursed bit? Well, there are actually two such elements, the one a bit less cursed than the other. The first, less cursed, one is that in a certain sense functions change the syntax in prefixed form: rather than requiring parentheses around function application to indicate how many arguments the function takes, as one would in <a href="https://en.wikipedia.org/wiki/Lisp_%28programming_language%29">lisp</a>, each function or operation takes a fixed number of arguments – two here in the case of operations, and one in the case of functions. This implies that if you had a two- or three-argument function, it would implicitly consume the following two or three values.</p>
+
+<p>The more cursed bit is that I still have multiplication via juxtaposition. At first I thought that I couldn't really support such a feature, as writing a number and then a variable name would correspond to two values, which would be consumed as inputs to the functions or operators. But when I thought about it for a bit, I could make white space significant, and have something like <code>5 a</code> be the value 5 followed by the value of a, and <code>5a</code> be five <em>times</em> a. This certainly is strange, and perhaps unintuitive, but on further reflection isn't <em>that</em> weird: after all, is <code>6 7</code> not different from <code>67</code>?</p>
+
+<p>Then there is something else I was thinking of, but which isn't demonstrated here: I was talking just now to the guy who's presenting the project, and in his prototype calculator program, he allows juxtaposition multiplication of variables, such that <code>abc</code> is equivalent to <code>(a*b*c)</code>. This has the downside of only allowing single-letter variable names (barring certain workarounds), which I'm not personally a big fan of, so initially I thought that I would want to avoid this in my language.</p>
+
+<p>But I have hit upon a solution. A cursed solution, but a solution none the less.</p>
+
+<p>Just let user-defined variables and function <em>change the syntax</em>. That is, when a variable or function is defined, it is added as a possible token, such that if the variables a, pi, fib, and foo are defined, then <code>apifib(foo)</code> would be tokenised as <code>&quot;a&quot; &quot;pi&quot; &quot;fib&quot; ( &quot;foo&quot; )</code>, rather than <code>&quot;apifib&quot; ( &quot;foo&quot; )</code> or <code>&quot;a&quot; &quot;p&quot; &quot;i&quot; &quot;f&quot; &quot;i&quot; &quot;b&quot; ( &quot;f&quot; &quot;o&quot; &quot;o&quot; )</code>.</p>
+
+<p>Now, for any serious programming language this would be an <em>awful</em> idea. But then again, this isn't a programming language, is it? It's a calculator. A calculator I might want to make Turing complete, but still a calculator. And this sort of makes sense, doesn't it, almost feels like how you would expect a calculator to behave. To some degree, <a href="https://desmos.com/calculator">desmos</a> has a similar thing going, where <code>asin(5bc)</code> is equivalent to <code>a*sin(5*b*c)</code>, though of course it only has pre-defined multi-character names, with all user-defined names (functions and variables) having to be single characters.</p>
+
+<h2>Some other considerations</h2>
+
+<p>There still are a few things I need to flesh out a bit in my mind. Stuff like how function/variable definition/assignment will look.</p>
+
+<p>I could do something like <code>a = tau/12</code> and <code>fib(n) = ...</code>, but how would this look in prefix or postfix mode? Do I just ban definition/assignment in those modes? That strikes me as inelegant${fn();}$. As does having some sort of drastically different syntax in different modes.</p>
+
+${fn_text(}$$"I realise complaining about inelegance might seem a bit strange after reveling in adding (or at least speculating about adding) some rather cursed features to the calculator, but I'd argue that cursedness and elegance are not mutually exclusive, and while I want something that is cursed, I don't want something that is arbitrary or janky"$${);}$
+
+<p>Furthermore, I'm wondering about how exactly I'll allow function definitions. Perhaps something functional with pattern matching would be nice, so that I could define the <a href="http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci function</a> as follows:</p>
+
+<pre><code>f(0) = 0
+f(1) = 1
+f(n) = f(n-1) + f(n-2)
+</code></pre>
+
+<p>And I think I probably shouldn't allow arbitrary for or while loops, as that feels too much like a programming language rather than a calculator.</p>
+
+<p>But then, how would I allow something like an efficient implementation of functions such as the Fibonacci function? After all, the given implementation above runs in about O(n²) time, iirc. For this I can think of two possible solutions.</p>
+
+<p>One is to automatically apply <a href="https://en.wikipedia.org/wiki/Memoization">memoization</a> to all functions; if just the previous two values of the Fibonacci function is memoized, it now runs in O(n) time!</p>
+
+<p>Another way would be to allow lambdas – for which choosing the syntax will be its own little adventure – such that you could instead define the Fibonacci function as follows${fn();}$:</p>
+
+<pre><code>f(n) = (\(a b n) if n = 0 then a else rec(b, a+b, n-1))(0, 1, n)
+</code></pre>
+
+${fn_text(}$$"with the exact final syntax of conditionals and recursion and the like of course still having to be decided; and how will I deal with booleans for that matter?"$${);}$
+
+<p>I've also been considering allowing parentheses to be dropped for single-argument functions. This means that <code>fib(10)</code> and <code>fib 10</code> would be the same. And theoretically something like <code>afibb</code> would be the same as <code>(a*fib(b))</code>, though perhaps juxtaposition-looking function application should instead be a syntax error. I was also wondering if all multi-argument functions should just require parentheses for function application (in the infix mode), or if I should let two-variable functions also operate as infix operations, so that I can have <code>2 foo 3</code> be equivalent to <code>foo(2, 3)</code>${fn();}$, though now the question becomes of how to slot that into operator precedence rules.${fn();}$${fn();}$</p>
+
+${fn_text(}$$"and now I'm wondering whether it would work to allow operators to be called as functions as well, such that <code>*(6, 7)</code> would be the same as <code>6 * 7</code>..."$${);}$
+
+${fn_text(}$$"one thing you might have thought of is allowing multi-argument functions by having <code>foo 2, 3</code> being equivalent to <code>foo(2, 3)</code>, but I thought of it for a bit, and it presents too many complications and is quite ugly in my opinion, so I will not have that"$${);}$
+
+${fn_text(}$$"something I've just thought of as I was reviewing the blog post for any mistakes and the like, is that I can just implement automatic <a href="https://en.wikipedia.org/wiki/Currying">currying</a>, such that <code>foo(2, 3)</code> is equivalent to <code>foo(2)(3)</code>, which would then be equivalent to <code>foo 2 3</code>; this seems quite elegant, other than you'd now have to work out how exactly it interacts with multiplication via juxtaposition"$${);}$
+
+<p>One last consideration is how to deal with operators which could take either one or two arguments. That is, plus and minus. In infix form, it is easy: <code>- 6</code> takes one argument, <code>8 - 6</code> takes two. And in <code>5 - + 4</code>, the minus takes two arguments and the plus one argument. But in prefix and suffix forms, this no longer is obvious. One way of resolving it is by going the <a href="https://en.wikipedia.org/wiki/APL_%28programming_language%29">APL</a> route, and, for example, use <code>-</code> only for binary subtraction and use something like <code>_</code> for unary negation. But this doesn't seem so nice; I want a user to be able to input a sum in a relatively intuitive way into the infix mode and have it work, and having some sort of secondary operation for negation would break that. One possible solution is to expand <code>- x</code> to <code>(0 - x)</code>, but this seems a bit inelegant. But I'm thinking of it.</p>
+
+${blog_article_end();}$

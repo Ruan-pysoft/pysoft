@@ -28,6 +28,12 @@ static const BlogEntry blog_entries[] = {
         .description = "demonstrating the power of lisp by creating a procedural dialect of rholisp using macros",
         .pub_date = "2026-02-17",
     },
+    {
+        .id = "calcplans",
+        .title = "Designing a Cursed Calculator App",
+        .description = "ruminations on how I want to design my calculator program for a project",
+        .pub_date = "2026-02-23",
+    },
 };
 static const size_t blog_entries_count = sizeof(blog_entries)/sizeof(*blog_entries);
 
