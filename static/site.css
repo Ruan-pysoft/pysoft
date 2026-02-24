@@ -274,6 +274,11 @@ pre {
   margin: 1em 5em;
 }
 
+.blip pre {
+  align-self: center;
+  text-align: left;
+}
+
 @media print {
   .blip {
     border-color: black;

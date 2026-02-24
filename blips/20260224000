@@ -1,0 +1,64 @@
+lisp-ffi 07:47
+
+Finally I have working ffi in <a href="/project/rholisp">rholisp</a>! Well, almost working. Return types other than void isn't implemented, and support for floats, doubles, and pointers are not implemented either, but I have enough to open and close a window using Raylib!</p>
+
+<pre><code>&gt; (def raylib (!ffi-load &quot;../ffi_playground/raylib-5.5_linux_amd64/lib/libraylib.so&quot;))
+()
+&gt; raylib
+(clib 94797688994320)
+&gt; (def InitWindow (!ffi-sym raylib &quot;InitWindow&quot;))
+()
+&gt; InitWindow
+(csym 139655444555879)
+&gt; (!ffi-call InitWindow () ' i32 800 ' i32 600 ' u64 0)
+INFO: Initializing raylib 5.5
+INFO: Platform backend: DESKTOP (GLFW)
+INFO: Supported raylib modules:
+INFO:     &gt; rcore:..... loaded (mandatory)
+INFO:     &gt; rlgl:...... loaded (mandatory)
+INFO:     &gt; rshapes:... loaded (optional)
+INFO:     &gt; rtextures:. loaded (optional)
+INFO:     &gt; rtext:..... loaded (optional)
+INFO:     &gt; rmodels:... loaded (optional)
+INFO:     &gt; raudio:.... loaded (optional)
+INFO: DISPLAY: Device initialized successfully
+INFO:     &gt; Display size: 1920 x 1080
+INFO:     &gt; Screen size:  800 x 600
+INFO:     &gt; Render size:  800 x 600
+INFO:     &gt; Viewport offsets: 0, 0
+INFO: GLAD: OpenGL extensions loaded successfully
+INFO: GL: Supported extensions count: 233
+INFO: GL: OpenGL device information:
+INFO:     &gt; Vendor:   Intel
+INFO:     &gt; Renderer: Mesa Intel(R) HD Graphics 520 (SKL GT2)
+INFO:     &gt; Version:  4.6 (Core Profile) Mesa 25.3.5-arch1.1
+INFO:     &gt; GLSL:     4.60
+INFO: GL: VAO extension detected, VAO functions loaded successfully
+INFO: GL: NPOT textures extension detected, full NPOT textures supported
+INFO: GL: DXT compressed textures supported
+INFO: GL: ETC2/EAC compressed textures supported
+INFO: PLATFORM: DESKTOP (GLFW - X11): Initialized successfully
+INFO: TEXTURE: [ID 1] Texture loaded successfully (1x1 | R8G8B8A8 | 1 mipmaps)
+INFO: TEXTURE: [ID 1] Default texture loaded successfully
+INFO: SHADER: [ID 1] Vertex shader compiled successfully
+INFO: SHADER: [ID 2] Fragment shader compiled successfully
+INFO: SHADER: [ID 3] Program shader loaded successfully
+INFO: SHADER: [ID 3] Default shader loaded successfully
+INFO: RLGL: Render batch vertex buffers loaded successfully in RAM (CPU)
+INFO: RLGL: Render batch vertex buffers loaded successfully in VRAM (GPU)
+INFO: RLGL: Default OpenGL state initialized successfully
+INFO: TEXTURE: [ID 2] Texture loaded successfully (128x128 | GRAY_ALPHA | 1 mipmaps)
+INFO: FONT: Default font loaded successfully (224 glyphs)
+INFO: SYSTEM: Working Directory: /home/ruan/Documents/programmeering/c/rholisp
+()
+&gt; (!ffi-call (!ffi-sym raylib &quot;CloseWindow&quot;) ())
+INFO: TEXTURE: [ID 2] Unloaded texture data from VRAM (GPU)
+INFO: SHADER: [ID 3] Default shader unloaded successfully
+INFO: TEXTURE: [ID 1] Default texture unloaded successfully
+INFO: Window closed successfully
+()
+&gt;</code></pre>
+
+<img style="max-width: 100%;" src="/blips/20260224/lisp-ffi.png" alt="screenshot of the above code running, creating a blank raylib window without a title">
+
+<p>Above you can see a demonstration of the current ffi capabilities
