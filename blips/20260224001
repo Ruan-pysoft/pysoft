@@ -1,0 +1,7 @@
+returning 08:47
+
+And I've got return values working! Well, all except floats and pointers, which should be pretty trivial, and structures, which I don't know how difficult it'll be. But I can query the width of a Raylib window!</p>
+
+<img style="max-width: 100%;" src="/blips/20260224/returning.png" alt="screenshot of a test raylib window">
+
+<p>In the above example, I had <code>rl-call</code> defined as <code>(defn rl-call (name ret () args) (call !ffi-call (cons (!ffi-sym raylib name) (cons ret args))))</code>.
