@@ -1,0 +1,10 @@
+yay 17:42
+
+got basic tokenisation working!</p>
+
+<pre><code>absinhcos5-67
+Got input: absinhcos5-67
+Tokenised input: ((undefined "ab") "sinh" "cos" (number 5) (number -67))
+</code></pre>
+
+<p>(for MCSP #0)
