@@ -115,9 +115,9 @@ da_foreach(struct blip, blip, &blips) {
 
 }$
 		<item>
-			<title>$(blip->slug)$</title>
+			<title>$("%s", blip->slug)$</title>
 			<link>https://pysoft.co.za/blips/$("%04d%02d%02d/%s.html", blip->year, blip->month, blip->day, blip->slug)$</link>
-			<description>$(sb.items)$</description>
+			<description>$("%s", sb.items)$</description>
 			${if (blip->has_time) {
 				int year = blip->year;
 				int month = blip->month;
