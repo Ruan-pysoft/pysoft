@@ -68,7 +68,7 @@ da_foreach(struct blip, blip, &blips) {
     const char *saved_license = license_extra;
 
     page_title = temp_sprintf("%s – blip", blip->slug);
-    page_description = temp_sprintf("a random thought about \"%s\"", blip->slug);
+    page_description = temp_sprintf("a random thought about &quot;%s&quot;", blip->slug);
     head_extra = NULL;
     license_extra = NULL;
 
