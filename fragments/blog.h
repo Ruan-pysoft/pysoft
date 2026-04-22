@@ -38,7 +38,7 @@ static const BlogEntry blog_entries[] = {
         .id = "hardtack",
         .title = "Experimenting with a Hardtack Recipe",
         .description = "a write-up of my second attempt at hardtack this year (with a recipe!)",
-        .pub_date = "2026-04-21",
+        .pub_date = "2026-04-22",
     },
 };
 static const size_t blog_entries_count = sizeof(blog_entries)/sizeof(*blog_entries);
