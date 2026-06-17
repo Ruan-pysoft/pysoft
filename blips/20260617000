@@ -1,6 +1,6 @@
 upscale
 
-So I remember a few years ago when I was still in highschool, I read the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Backpropagation">backpropogation</a> and implemented a basic neural net in either C or Python (perhaps C++? Or C <em>and</em> Python?). I believe that <a href="https://youtu.be/ZjxPPvqNp3k?list=PLpM-Dvs8t0VZPZKggcql-MmjaBdZKeDMw">this</a> Tsoding video inspired me to do so.</p>
+<p>So I remember a few years ago when I was still in highschool, I read the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Backpropagation">backpropogation</a> and implemented a basic neural net in either C or Python (perhaps C++? Or C <em>and</em> Python?). I believe that <a href="https://youtu.be/ZjxPPvqNp3k?list=PLpM-Dvs8t0VZPZKggcql-MmjaBdZKeDMw">this</a> Tsoding video inspired me to do so.</p>
 
 <p>Tsoding also recently said that Odin is the closest thing to Jai that's currently publicly available, and Jai looks <em>super</em> cool and I'm kinda bummed I don't get to play around with it yet. So I thought, why not play around with Odin, see how it works? Especially since I already got experience in Zig, Rust, Nim, and C++, but not yet Odin. That's most of the relatively mainstream "C successor" languages (other than D I guess).</p>
 
@@ -32,4 +32,4 @@ So I remember a few years ago when I was still in highschool, I read the Wikiped
 
 <img style="max-width: 100%;" src="/blips/20260617/grass_block.jpg">
 
-<p>I mean, it's <em>sorta</em> got the idea, doesn't it?
+<p>I mean, it's <em>sorta</em> got the idea, doesn't it?</p>

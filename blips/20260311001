@@ -1,6 +1,6 @@
 pi-thon
 
-Inspired by <a href="https://youtu.be/RZBhSi_PwHU">this</a> Matt Parker video, some bad python code to approximate pi:</p>
+<p>Inspired by <a href="https://youtu.be/RZBhSi_PwHU">this</a> Matt Parker video, some bad python code to approximate pi:</p>
 
 <pre><code>from random import random
 from math import ceil, gcd, sqrt
@@ -12,4 +12,4 @@ p = sum(gcd(ceil(random()*upper),ceil(random()*upper))==1 for _ in range(count))
 print(f"{p=} pi={sqrt(6/p)}")
 </code></pre>
 
-<p>I got a approximation of 3.141475812850102.
+<p>I got a approximation of 3.141475812850102.</p>

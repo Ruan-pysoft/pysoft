@@ -76,7 +76,7 @@ da_foreach(struct blip, blip, &blips) {
     }$
     <h1>$(blip->slug)$ – blip on $("%04d-%02d-%02d", blip->year, blip->month, blip->day)$</h1>
     <article class="blip">
-    <p>$("%s", blip->content)$</p>
+    $("%s", blip->content)$
     </article>
     ${
     if (blip->has_time) {}$
@@ -112,7 +112,7 @@ for (size_t i = 0; i < on_first_page; ++i) {
     }$
     <h3><a href="/blips/$("%04d%02d%02d/%s.html", blip->year, blip->month, blip->day, blip->slug)$">$(blip->slug)$</a> – blip on $("%04d-%02d-%02d", blip->year, blip->month, blip->day)$</h3>
     <article class="blip">
-    <p>$("%s", blip->content)$</p>
+    $("%s", blip->content)$
     </article>
     ${
     if (blip->has_time) {}$
