@@ -26,4 +26,10 @@ So I remember a few years ago when I was still in highschool, I read the Wikiped
 
 <img style="max-width: 100%;" src="/blips/20260617/upscaled_v3.jpg">
 
-<p>The third upscaled version. The total error is actually higher than the second version, but it looks quite interesting; I at least think it does. It is made from the network in commit <a href="https://github.com/Ruan-pysoft/backpropogation-in-odin/blob/1d0be233c7a4c0990a9d6f959b5ed8b0886b7539/main.odin">1d0be23</a>, where the network is pretty much the same except that the last hidden layer uses tanh for its activation function rather than the logistic function. For some reason this works quite well, but having the <em>second</em> layer use tanh just doesn't work at all?
+<p>The third upscaled version. The total error is actually higher than the second version, but it looks quite interesting; I at least think it does. It is made from the network in commit <a href="https://github.com/Ruan-pysoft/backpropogation-in-odin/blob/1d0be233c7a4c0990a9d6f959b5ed8b0886b7539/main.odin">1d0be23</a>, where the network is pretty much the same except that the last hidden layer uses tanh for its activation function rather than the logistic function. For some reason this works quite well, but having the <em>second</em> layer use tanh just doesn't work at all?</p>
+
+<p><b>Addendum</b>: I also quickly threw the grass_block_side.png texture from minecraft 1.21.7 (newest version I happened to have on my laptop) into the network. Of course, it being a much more complex texture means that the network didn't manage to fit it as well, but despite that the 16x16 output doesn't actually look half bad (not <em>great</em>, but not bad either). However, the upscaled version...</p>
+
+<img style="max-width: 100%;" src="/blips/20260617/grass_block.jpg">
+
+<p>I mean, it's <em>sorta</em> got the idea, doesn't it?
