@@ -1,0 +1,29 @@
+upscale
+
+So I remember a few years ago when I was still in highschool, I read the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Backpropagation">backpropogation</a> and implemented a basic neural net in either C or Python (perhaps C++? Or C <em>and</em> Python?). I believe that <a href="https://youtu.be/ZjxPPvqNp3k?list=PLpM-Dvs8t0VZPZKggcql-MmjaBdZKeDMw">this</a> Tsoding video inspired me to do so.</p>
+
+<p>Tsoding also recently said that Odin is the closest thing to Jai that's currently publicly available, and Jai looks <em>super</em> cool and I'm kinda bummed I don't get to play around with it yet. So I thought, why not play around with Odin, see how it works? Especially since I already got experience in Zig, Rust, Nim, and C++, but not yet Odin. That's most of the relatively mainstream "C successor" languages (other than D I guess).</p>
+
+<p>Now, I've tried getting into Odin a few times previously, but not gotten very far; one of the problems I had was that I didn't have a decently complex project that I actually cared about which was also well within my abilities to tackle to learn Odin with. But since I've now completed a semester of Linear Algebra, when I read the wiki page on Backpropogation again, I actually understood the idea behind it, so I thought this would be a great project to start learning Odin with!</p>
+
+<p>Anyways, I've now got it basically working, available <a href="https://github.com/Ruan-pysoft/backpropogation-in-odin">here</a>, and I wanna show you some of the results!</p>
+
+<img style="max-width: 100%;" src="/blips/20260617/input.png">
+
+<p>Above you can see (an upscaled version of) the image I trained the neural network on (512x512 for better display, the actual image is 16x16); as input, it'd receive a normalised (x, y) pair, and as output it would produced normalised RGB.</p>
+
+<img style="max-width: 100%;" src="/blips/20260617/upscaled_v1.jpg">
+
+<p>Here now is the first upscaled version; it looks quite good if I say so myself! I cannot quite remember the network parameters that went into it, it is an intermediate result when I was playing with the network. I do remember it had five hidden layers by now and used a mix of the sin and logistic activation functions.</p>
+
+<img style="max-width: 100%;" src="/blips/20260617/upscaled_v2.jpg">
+
+<p>The second upscaled version, even better than the first. Lower total error, certainly. It uses the network as in commit <a href="https://github.com/Ruan-pysoft/backpropogation-in-odin/blob/e2af5730d3d0ed8160fe3ebfc7805b596f74131c/main.odin">e2af573</a>. The hidden layer sizes are, in order, 4, 8, 8, 16, and 4 nodes. The first and third hidden layers use sin as an activation function, the rest use the logistic function (as does the output layer).</p>
+
+<p>I also had to play quite a bit with the eta parameter of the network to get good results; wouldn't be surprised if I spent more than an hour adjusting it, looking at the results, and adjusting it again. In the end, I ran ten thousand rounds of training, where eta started off at 1/16 (I just noticed a bug... I tried to set it to 3/8 initially, but the condition to do so is never met...), ramped it up to 1/4 at generation 40, brought it down to 3/16 at generation 751, further down to 1/8 at generation 3,000, 1/16 at 6,000, 3/64 at 8,000, 9/256 at 9,000, and then back up to 1/32 at generation 9,500.<p>
+
+<p>Why do these values of eta work? I have no clue, but they do, so I used them.</p>
+
+<img style="max-width: 100%;" src="/blips/20260617/upscaled_v3.jpg">
+
+<p>The third upscaled version. The total error is actually higher than the second version, but it looks quite interesting; I at least think it does. It is made from the network in commit <a href="https://github.com/Ruan-pysoft/backpropogation-in-odin/blob/1d0be233c7a4c0990a9d6f959b5ed8b0886b7539/main.odin">1d0be23</a>, where the network is pretty much the same except that the last hidden layer uses tanh for its activation function rather than the logistic function. For some reason this works quite well, but having the <em>second</em> layer use tanh just doesn't work at all?
